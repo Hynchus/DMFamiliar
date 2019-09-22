@@ -150,6 +150,10 @@ namespace RollTheDice {
             }
             else {
                 rules[outdated_rule_index] = rule;
+                if (active_profile != "Default") {
+                    RemoveRuleFromProfile(active_profile, previous_name);
+                }
+                RemoveRuleFromProfile("Default", previous_name);
             }
             AddRuleToProfile(rule, active_profile);
         }
