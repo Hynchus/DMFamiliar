@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportRules));
             this.DamageRulesListbox = new System.Windows.Forms.ListBox();
             this.Importbtn = new System.Windows.Forms.Button();
             this.Cancelbtn = new System.Windows.Forms.Button();
@@ -126,6 +127,7 @@
             this.Controls.Add(this.RulesListboxesPanel);
             this.Controls.Add(this.Cancelbtn);
             this.Controls.Add(this.Importbtn);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(460, 300);
             this.Name = "ImportRules";
             this.Text = "ImportRules";

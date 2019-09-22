@@ -62,5 +62,19 @@ namespace RollTheDice {
         protected void AddModifier(FlowLayoutPanel layout, Modifier modifier) {
             layout.Controls.Add(modifier);
         }
+
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuleEditor));
+            this.SuspendLayout();
+            // 
+            // RuleEditor
+            // 
+            this.ClientSize = new System.Drawing.Size(278, 244);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "RuleEditor";
+            this.ResumeLayout(false);
+
+        }
     }
 }

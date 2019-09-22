@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditEventRule));
             this.AddDieButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
@@ -181,6 +182,7 @@
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.AddDieButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(888, 466);
             this.Name = "EditEventRule";
             this.Text = "Rule";
