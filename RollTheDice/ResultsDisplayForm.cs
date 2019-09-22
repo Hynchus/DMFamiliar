@@ -18,6 +18,7 @@ namespace RollTheDice {
         }
 
         public void AddRollDisplay(RollDisplay roll_display) {
+            roll_display.Flash();
             DisplayFlowLayout.Controls.Add(roll_display);
             DisplayFlowLayout.Controls[DisplayFlowLayout.Controls.Count - 1].Focus();
             DisplayFlowLayout.ScrollControlIntoView(roll_display);

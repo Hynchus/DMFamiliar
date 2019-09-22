@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RollTheDice {
     public static class DiceTower {
+        private static Random seed = new Random();
 
         public static int SumModifiers(List<StructCollection.Mod> modifiers) {
             int sum = 0;
@@ -16,10 +17,9 @@ namespace RollTheDice {
         }
 
         public static int RollDie(int count, int faces) {
-            Random random = new Random();
             int result = 0;
             for (int i = 0; i < count; i++) {
-                result += random.Next(1, faces + 1);
+                result += seed.Next(1, faces + 1);
             }
             return result;
         }

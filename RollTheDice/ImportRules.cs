@@ -22,7 +22,9 @@ namespace RollTheDice {
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            ListBox.SelectedObjectCollection selected_rules = RulesListbox.SelectedItems;
+            List<string> selected_rules = new List<string>();
+            selected_rules.Concat(DamageRulesListbox.SelectedItems.Cast<string>());
+            selected_rules.Concat(EventRulesListbox.SelectedItems.Cast<string>());
             if (selected_rules.Count <= 0) {
                 MessageBox.Show("No rule selected for import.");
                 return;
@@ -46,8 +48,20 @@ namespace RollTheDice {
             this.Text = "Import Rules to " + profile.profile_name;
 
             foreach (StructCollection.Rule rule in Secretary.GetRules()) {
-                if (!profile.rule_names.Contains(rule.rule_name)) {
-                    RulesListbox.Items.Add(rule.rule_name);
+                if (profile.rule_names.Contains(rule.rule_name)) {
+                    continue;
+                }
+                if (rule.results.type == StructCollection.ResultCollection.Type.Damage)
+                {
+                    DamageRulesListbox.Items.Add(rule.rule_name);
+                }
+                else if (rule.results.type == StructCollection.ResultCollection.Type.Event)
+                {
+                    EventRulesListbox.Items.Add(rule.rule_name);
+                }
+                else
+                {
+                    EventRulesListbox.Items.Add(rule.rule_name);
                 }
             }
         }
@@ -63,6 +77,11 @@ namespace RollTheDice {
                 Properties.Settings.Default.ImportRuleFormSize = this.RestoreBounds.Size;
             }
             Properties.Settings.Default.Save();
+        }
+
+        private void EventRulesListbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace RollTheDice {
     public static class StructCollection {
@@ -218,7 +219,7 @@ namespace RollTheDice {
             public enum Type { Event, Damage };
             public Type type;
 
-            public virtual string Display(int roll_number, int roll_modifier) {return "";}
+            public virtual (string roll, string result, Color colour) Display(int roll_number, int roll_modifier) { return (roll: "", result: "", colour: Color.Yellow); }
 
             public virtual void LoadXML(ref XmlReader xml) { }
 
@@ -252,14 +253,14 @@ namespace RollTheDice {
                 this.modifiers = new List<Mod>();
             }
 
-            public override string Display(int roll_number, int roll_modifier) {
+            public override (string roll, string result, Color colour) Display(int roll_number, int roll_modifier) {
                 if (crit_success && roll_number >= crit_success_threshold) {
-                    return "Critical Hit!\n" + (DiceTower.RollDice(dice) + DiceTower.RollDice(dice) + DiceTower.SumModifiers(modifiers)).ToString() + " " + damage_type + " damage!";
+                    return (roll: ("Natural " + roll_number.ToString()), result: "Critical Hit!\n" + (DiceTower.RollDice(dice) + DiceTower.RollDice(dice) + DiceTower.SumModifiers(modifiers)).ToString() + " " + damage_type + " damage!", colour: Color.Blue);
                 }
                 else if (crit_fail && roll_number <= crit_fail_threshold) {
-                    return "Critical Fail!";
+                    return (roll: ("Natural " + roll_number.ToString()), result: "Critical Fail!", colour: Color.Red);
                 }
-                return DiceTower.RollDice(dice, modifiers).ToString() + " " + damage_type + " damage";
+                return (roll: (roll_number + roll_modifier).ToString(), result: DiceTower.RollDice(dice, modifiers).ToString() + " " + damage_type + " damage", colour: Color.Green);
             }
 
             public override void LoadXML(ref XmlReader xml) {
@@ -321,8 +322,8 @@ namespace RollTheDice {
                 this.possible_results = new List<EventResult>();
             }
 
-            public override string Display(int roll_number, int roll_modifier) {
-                return possible_results.Find(x => x.roll_number == roll_number + roll_modifier).result_text;
+            public override (string roll, string result, Color colour) Display(int roll_number, int roll_modifier) {
+                return (roll: (roll_number + roll_modifier).ToString(), result: possible_results.Find(x => x.roll_number == roll_number + roll_modifier).result_text, colour: Color.Yellow);
             }
 
             public void StoreResult(EventResult result) {
@@ -344,7 +345,6 @@ namespace RollTheDice {
                             EventResult new_result = new EventResult();
                             new_result.LoadXML(ref xml);
                             possible_results.Add(new_result);
-                            continue;
                         }
                         else {
                             break;
