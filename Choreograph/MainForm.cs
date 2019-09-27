@@ -253,10 +253,6 @@ namespace Choreograph
             if (!Properties.Settings.Default.LoadMainFormSettings) { return; }
             Location = Properties.Settings.Default.MainFormLocation;
             Size = Properties.Settings.Default.MainFormSize;
-            if (Properties.Settings.Default.ShowDisplay)
-            {
-                show_display();
-            }
         }
 
         private void load_active_controls()
@@ -349,6 +345,10 @@ namespace Choreograph
             if (Properties.Settings.Default.MainSplitterDistance >= 0)
             {
                 splitContainer1.SplitterDistance = Properties.Settings.Default.MainSplitterDistance;
+            }
+            if (Properties.Settings.Default.ShowDisplay)
+            {
+                show_display();
             }
         }
     }
