@@ -12,10 +12,25 @@ namespace RollTheDice {
     public partial class RuleButton : UserControl {
         private Main owner;
 
-        public RuleButton(Main owner, string rule_name) {
+        public void set_button_colour(Color colour)
+        {
+            Button.BackColor = colour;
+            float brightness = colour.GetBrightness();
+            if (colour.GetBrightness() > 0.49f)
+            {
+                Button.ForeColor = Color.Black;
+            }
+            else
+            {
+                Button.ForeColor = Color.White;
+            }
+        }
+
+        public RuleButton(Main owner, string rule_name, Color rule_colour) {
             InitializeComponent();
             this.owner = owner;
             Button.Text = rule_name;
+            set_button_colour(rule_colour);
         }
 
         public string GetRuleName() {

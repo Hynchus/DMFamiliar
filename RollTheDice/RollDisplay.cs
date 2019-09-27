@@ -27,7 +27,7 @@ namespace RollTheDice {
             
             RuleNameLabel.Text = rule.rule_name;
             if (rule.results != null) {
-                (string roll, string result, Color colour) display = rule.results.Display(roll_number, roll_modifier);
+                (string roll, string result, Color colour) display = rule.results.Display(roll_number, roll_modifier, rule.colour);
                 RollNumberLabel.Text = display.roll;
                 ResultTextLabel.Text = display.result;
                 flash_colour = display.colour;

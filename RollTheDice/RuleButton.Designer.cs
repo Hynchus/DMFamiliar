@@ -27,17 +27,19 @@
             this.Button = new System.Windows.Forms.Button();
             this.ButtonRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonRightClickMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // Button
             // 
+            this.Button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Button.Font = new System.Drawing.Font("Trebuchet MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Button.Location = new System.Drawing.Point(14, 14);
             this.Button.Name = "Button";
             this.Button.Padding = new System.Windows.Forms.Padding(5);
-            this.Button.Size = new System.Drawing.Size(142, 142);
+            this.Button.Size = new System.Drawing.Size(146, 146);
             this.Button.TabIndex = 0;
             this.Button.Text = "Rule";
             this.Button.UseVisualStyleBackColor = true;
@@ -52,7 +54,7 @@
             this.removeToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.ButtonRightClickMenu.Name = "ButtonRightClickMenu";
-            this.ButtonRightClickMenu.Size = new System.Drawing.Size(290, 127);
+            this.ButtonRightClickMenu.Size = new System.Drawing.Size(290, 94);
             // 
             // editToolStripMenuItem
             // 
@@ -61,13 +63,6 @@
             this.editToolStripMenuItem.Text = "Edit Rule";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.EditToolStripMenuItem_Click);
             // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(289, 30);
-            this.deleteToolStripMenuItem.Text = "Delete Rule";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
@@ -75,13 +70,20 @@
             this.removeToolStripMenuItem.Text = "Remove Rule From Profile";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(289, 30);
+            this.deleteToolStripMenuItem.Text = "Delete Rule";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
             // RuleButton
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.Button);
             this.Name = "RuleButton";
-            this.Size = new System.Drawing.Size(170, 170);
+            this.Size = new System.Drawing.Size(174, 174);
             this.ButtonRightClickMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 

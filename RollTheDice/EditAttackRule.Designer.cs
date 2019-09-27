@@ -46,6 +46,7 @@
             this.CriticalSuccessThresholdTextbox = new System.Windows.Forms.ToolStripTextBox();
             this.criticalFailureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CriticalFailThresholdTextbox = new System.Windows.Forms.ToolStripTextBox();
+            this.colourbtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -63,35 +64,41 @@
             // 
             // AddDieButton
             // 
+            this.AddDieButton.BackColor = System.Drawing.Color.YellowGreen;
+            this.AddDieButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.AddDieButton.Location = new System.Drawing.Point(12, 42);
             this.AddDieButton.Name = "AddDieButton";
             this.AddDieButton.Size = new System.Drawing.Size(120, 35);
             this.AddDieButton.TabIndex = 0;
             this.AddDieButton.Text = "Add Die";
-            this.AddDieButton.UseVisualStyleBackColor = true;
+            this.AddDieButton.UseVisualStyleBackColor = false;
             this.AddDieButton.Click += new System.EventHandler(this.AddDieButton_Click);
             // 
             // SaveButton
             // 
             this.SaveButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.SaveButton.Location = new System.Drawing.Point(325, 364);
+            this.SaveButton.BackColor = System.Drawing.Color.SkyBlue;
+            this.SaveButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.SaveButton.Location = new System.Drawing.Point(312, 364);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(75, 34);
             this.SaveButton.TabIndex = 2;
             this.SaveButton.Text = "Save";
-            this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.UseVisualStyleBackColor = false;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // CancelBtn
             // 
             this.CancelBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.CancelBtn.BackColor = System.Drawing.Color.LightSalmon;
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelBtn.Location = new System.Drawing.Point(474, 364);
+            this.CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.CancelBtn.Location = new System.Drawing.Point(455, 364);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(75, 34);
             this.CancelBtn.TabIndex = 3;
             this.CancelBtn.Text = "Cancel";
-            this.CancelBtn.UseVisualStyleBackColor = true;
+            this.CancelBtn.UseVisualStyleBackColor = false;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
             // splitContainer1
@@ -113,8 +120,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.DamageTypeTextbox);
             this.splitContainer1.Panel2.Controls.Add(this.AddDamageModifier);
             this.splitContainer1.Panel2.Controls.Add(this.AddDamageDieButton);
-            this.splitContainer1.Size = new System.Drawing.Size(842, 263);
-            this.splitContainer1.SplitterDistance = 99;
+            this.splitContainer1.Size = new System.Drawing.Size(820, 273);
+            this.splitContainer1.SplitterDistance = 102;
             this.splitContainer1.TabIndex = 4;
             // 
             // splitContainer2
@@ -133,7 +140,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.ModifierLayout);
-            this.splitContainer2.Size = new System.Drawing.Size(842, 99);
+            this.splitContainer2.Size = new System.Drawing.Size(820, 102);
             this.splitContainer2.SplitterDistance = 200;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -144,7 +151,7 @@
             this.DiceLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.DiceLayout.Location = new System.Drawing.Point(0, 0);
             this.DiceLayout.Name = "DiceLayout";
-            this.DiceLayout.Size = new System.Drawing.Size(198, 97);
+            this.DiceLayout.Size = new System.Drawing.Size(198, 100);
             this.DiceLayout.TabIndex = 0;
             this.DiceLayout.WrapContents = false;
             // 
@@ -153,7 +160,7 @@
             this.ModifierLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ModifierLayout.Location = new System.Drawing.Point(0, 0);
             this.ModifierLayout.Name = "ModifierLayout";
-            this.ModifierLayout.Size = new System.Drawing.Size(636, 97);
+            this.ModifierLayout.Size = new System.Drawing.Size(614, 100);
             this.ModifierLayout.TabIndex = 1;
             // 
             // splitContainer4
@@ -174,7 +181,7 @@
             // splitContainer4.Panel2
             // 
             this.splitContainer4.Panel2.Controls.Add(this.DamageModifiersLayout);
-            this.splitContainer4.Size = new System.Drawing.Size(842, 104);
+            this.splitContainer4.Size = new System.Drawing.Size(820, 104);
             this.splitContainer4.SplitterDistance = 200;
             this.splitContainer4.TabIndex = 1;
             // 
@@ -194,7 +201,7 @@
             this.DamageModifiersLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DamageModifiersLayout.Location = new System.Drawing.Point(0, 0);
             this.DamageModifiersLayout.Name = "DamageModifiersLayout";
-            this.DamageModifiersLayout.Size = new System.Drawing.Size(636, 102);
+            this.DamageModifiersLayout.Size = new System.Drawing.Size(614, 102);
             this.DamageModifiersLayout.TabIndex = 1;
             // 
             // DamageTypeTextbox
@@ -203,7 +210,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DamageTypeTextbox.Location = new System.Drawing.Point(163, 19);
             this.DamageTypeTextbox.Name = "DamageTypeTextbox";
-            this.DamageTypeTextbox.Size = new System.Drawing.Size(516, 26);
+            this.DamageTypeTextbox.Size = new System.Drawing.Size(494, 26);
             this.DamageTypeTextbox.TabIndex = 8;
             this.DamageTypeTextbox.Text = "Damage Type";
             this.DamageTypeTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -213,22 +220,26 @@
             // AddDamageModifier
             // 
             this.AddDamageModifier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddDamageModifier.Location = new System.Drawing.Point(722, 15);
+            this.AddDamageModifier.BackColor = System.Drawing.Color.YellowGreen;
+            this.AddDamageModifier.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.AddDamageModifier.Location = new System.Drawing.Point(700, 15);
             this.AddDamageModifier.Name = "AddDamageModifier";
             this.AddDamageModifier.Size = new System.Drawing.Size(120, 35);
             this.AddDamageModifier.TabIndex = 7;
             this.AddDamageModifier.Text = "Add Modifier";
-            this.AddDamageModifier.UseVisualStyleBackColor = true;
+            this.AddDamageModifier.UseVisualStyleBackColor = false;
             this.AddDamageModifier.Click += new System.EventHandler(this.AddDamageModifier_Click);
             // 
             // AddDamageDieButton
             // 
+            this.AddDamageDieButton.BackColor = System.Drawing.Color.YellowGreen;
+            this.AddDamageDieButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.AddDamageDieButton.Location = new System.Drawing.Point(0, 15);
             this.AddDamageDieButton.Name = "AddDamageDieButton";
             this.AddDamageDieButton.Size = new System.Drawing.Size(120, 35);
             this.AddDamageDieButton.TabIndex = 1;
             this.AddDamageDieButton.Text = "Add Die";
-            this.AddDamageDieButton.UseVisualStyleBackColor = true;
+            this.AddDamageDieButton.UseVisualStyleBackColor = false;
             this.AddDamageDieButton.Click += new System.EventHandler(this.AddDamageDieButton_Click);
             // 
             // NameTextbox
@@ -237,7 +248,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NameTextbox.Location = new System.Drawing.Point(175, 46);
             this.NameTextbox.Name = "NameTextbox";
-            this.NameTextbox.Size = new System.Drawing.Size(516, 26);
+            this.NameTextbox.Size = new System.Drawing.Size(494, 26);
             this.NameTextbox.TabIndex = 5;
             this.NameTextbox.Text = "Rule Name";
             this.NameTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -248,12 +259,14 @@
             // AddModifierButton
             // 
             this.AddModifierButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddModifierButton.Location = new System.Drawing.Point(733, 42);
+            this.AddModifierButton.BackColor = System.Drawing.Color.YellowGreen;
+            this.AddModifierButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.AddModifierButton.Location = new System.Drawing.Point(712, 42);
             this.AddModifierButton.Name = "AddModifierButton";
             this.AddModifierButton.Size = new System.Drawing.Size(120, 35);
             this.AddModifierButton.TabIndex = 6;
             this.AddModifierButton.Text = "Add Modifier";
-            this.AddModifierButton.UseVisualStyleBackColor = true;
+            this.AddModifierButton.UseVisualStyleBackColor = false;
             this.AddModifierButton.Click += new System.EventHandler(this.AddModifierButton_Click);
             // 
             // MenuStrip
@@ -264,7 +277,7 @@
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.Name = "MenuStrip";
             this.MenuStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.MenuStrip.Size = new System.Drawing.Size(866, 33);
+            this.MenuStrip.Size = new System.Drawing.Size(844, 33);
             this.MenuStrip.TabIndex = 7;
             this.MenuStrip.Text = "menuStrip1";
             // 
@@ -325,11 +338,23 @@
             this.CriticalFailThresholdTextbox.ToolTipText = "Dice roll <= # results in Critical Fail";
             this.CriticalFailThresholdTextbox.Leave += new System.EventHandler(this.CriticalFailThresholdTextbox_Leave);
             // 
+            // colourbtn
+            // 
+            this.colourbtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.colourbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.colourbtn.Location = new System.Drawing.Point(13, 364);
+            this.colourbtn.Name = "colourbtn";
+            this.colourbtn.Size = new System.Drawing.Size(34, 34);
+            this.colourbtn.TabIndex = 8;
+            this.colourbtn.UseVisualStyleBackColor = true;
+            this.colourbtn.Click += new System.EventHandler(this.colourbtn_Click);
+            // 
             // EditAttackRule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(866, 410);
+            this.ClientSize = new System.Drawing.Size(844, 410);
+            this.Controls.Add(this.colourbtn);
             this.Controls.Add(this.AddModifierButton);
             this.Controls.Add(this.NameTextbox);
             this.Controls.Add(this.splitContainer1);
@@ -339,8 +364,9 @@
             this.Controls.Add(this.MenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuStrip;
-            this.MinimumSize = new System.Drawing.Size(888, 466);
+            this.MinimumSize = new System.Drawing.Size(866, 466);
             this.Name = "EditAttackRule";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Rule";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditAttackRule_FormClosing);
             this.Load += new System.EventHandler(this.EditAttackRule_Load);
@@ -388,5 +414,6 @@
         private System.Windows.Forms.ToolStripMenuItem criticalFailureToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox CriticalSuccessThresholdTextbox;
         private System.Windows.Forms.ToolStripTextBox CriticalFailThresholdTextbox;
+        private System.Windows.Forms.Button colourbtn;
     }
 }

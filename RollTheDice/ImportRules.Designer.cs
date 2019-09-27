@@ -48,23 +48,27 @@
             // Importbtn
             // 
             this.Importbtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Importbtn.BackColor = System.Drawing.Color.SkyBlue;
+            this.Importbtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Importbtn.Location = new System.Drawing.Point(126, 198);
             this.Importbtn.Name = "Importbtn";
             this.Importbtn.Size = new System.Drawing.Size(75, 34);
             this.Importbtn.TabIndex = 1;
             this.Importbtn.Text = "Import";
-            this.Importbtn.UseVisualStyleBackColor = true;
+            this.Importbtn.UseVisualStyleBackColor = false;
             this.Importbtn.Click += new System.EventHandler(this.button1_Click);
             // 
             // Cancelbtn
             // 
             this.Cancelbtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Cancelbtn.BackColor = System.Drawing.Color.LightSalmon;
+            this.Cancelbtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Cancelbtn.Location = new System.Drawing.Point(236, 198);
             this.Cancelbtn.Name = "Cancelbtn";
             this.Cancelbtn.Size = new System.Drawing.Size(75, 34);
             this.Cancelbtn.TabIndex = 2;
             this.Cancelbtn.Text = "Cancel";
-            this.Cancelbtn.UseVisualStyleBackColor = true;
+            this.Cancelbtn.UseVisualStyleBackColor = false;
             this.Cancelbtn.Click += new System.EventHandler(this.button2_Click);
             // 
             // EventRulesListbox
@@ -130,6 +134,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(460, 300);
             this.Name = "ImportRules";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ImportRules";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ImportRules_FormClosing);
             this.Load += new System.EventHandler(this.ImportRules_Load);

@@ -25,14 +25,20 @@ namespace RollTheDice {
             }
         }
 
+
         protected virtual void RuleForm_Load(object sender, EventArgs e) {
-            this.Location = Properties.Settings.Default.RuleFormLocation;
-            this.Size = Properties.Settings.Default.RuleFormSize;
-            if (Properties.Settings.Default.RuleFormState == FormWindowState.Maximized) {
-                this.WindowState = FormWindowState.Maximized;
-            }
-            else {
-                this.WindowState = FormWindowState.Normal;
+            if (Properties.Settings.Default.LoadRuleFormSettings)
+            {
+                this.Location = Properties.Settings.Default.RuleFormLocation;
+                this.Size = Properties.Settings.Default.RuleFormSize;
+                if (Properties.Settings.Default.RuleFormState == FormWindowState.Maximized)
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
             }
             loading = false;
         }
@@ -47,6 +53,7 @@ namespace RollTheDice {
                 Properties.Settings.Default.RuleFormLocation = this.RestoreBounds.Location;
                 Properties.Settings.Default.RuleFormSize = this.RestoreBounds.Size;
             }
+            Properties.Settings.Default.LoadRuleFormSettings = true;
             Properties.Settings.Default.Save();
         }
 
@@ -73,6 +80,7 @@ namespace RollTheDice {
             this.ClientSize = new System.Drawing.Size(278, 244);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RuleEditor";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ResumeLayout(false);
 
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace RollTheDice {
     public static class Secretary {
@@ -32,7 +33,7 @@ namespace RollTheDice {
 							while (true) {
                                 if (xml.IsStartElement()) {
                                     if (xml.Name == "rule") {
-                                        StructCollection.Rule rule = new StructCollection.Rule("", new StructCollection.ResultCollection(), -1, -1, new List<StructCollection.Mod>(), new List<StructCollection.Die>());
+                                        StructCollection.Rule rule = new StructCollection.Rule("", new StructCollection.ResultCollection(), -1, -1, new List<StructCollection.Mod>(), new List<StructCollection.Die>(), Color.LightGray);
                                         rule.LoadXML(ref xml);
                                         rules.Add(rule);
                                         continue;
