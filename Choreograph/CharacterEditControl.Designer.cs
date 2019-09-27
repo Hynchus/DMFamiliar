@@ -52,6 +52,7 @@
             this.removebtn.Name = "removebtn";
             this.removebtn.Size = new System.Drawing.Size(32, 32);
             this.removebtn.TabIndex = 4;
+            this.removebtn.TabStop = false;
             this.toolTip1.SetToolTip(this.removebtn, "Remove from Active list");
             this.removebtn.UseVisualStyleBackColor = false;
             this.removebtn.Click += new System.EventHandler(this.removebtn_Click);

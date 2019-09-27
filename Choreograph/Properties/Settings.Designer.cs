@@ -118,5 +118,17 @@ namespace Choreograph.Properties {
                 this["LoadDisplayFormSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisplayFormTransformLock {
+            get {
+                return ((bool)(this["DisplayFormTransformLock"]));
+            }
+            set {
+                this["DisplayFormTransformLock"] = value;
+            }
+        }
     }
 }

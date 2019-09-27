@@ -44,6 +44,7 @@
             this.movebtn.Name = "movebtn";
             this.movebtn.Size = new System.Drawing.Size(32, 32);
             this.movebtn.TabIndex = 5;
+            this.movebtn.TabStop = false;
             this.movebtn.UseVisualStyleBackColor = false;
             this.movebtn.Click += new System.EventHandler(this.movebtn_Click);
             // 

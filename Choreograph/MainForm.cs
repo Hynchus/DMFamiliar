@@ -69,7 +69,7 @@ namespace Choreograph
             {
                 display_form.Close();
             }
-            display_form = new InitiativeDisplayForm();
+            display_form = new InitiativeDisplayForm(hide_display);
             displaybtn.Text = "Hide Display";
             displaybtn.BackColor = Color.Violet;
             display_form.Show();
@@ -79,7 +79,14 @@ namespace Choreograph
         {
             if (display_form != null)
             {
-                display_form.Close();
+                try
+                {
+                    display_form.Close();
+                }
+                catch (Exception)
+                {
+                    // already closed, can ignore
+                }
             }
             display_form = null;
             displaybtn.Text = "Show Display";

@@ -12,18 +12,119 @@ namespace Choreograph
 {
     public partial class InitiativeDisplayForm : Form
     {
+        public delegate void CloseDisplayFunction();
+
+        // The character name labels are bottom docked, so the panel holding them has
+        // its controls in the reverse order. We have to reverse the list when traversing it.
+        CloseDisplayFunction close_display;
         Size ACTUAL_MINIMUM_SIZE;
         int STARTING_HEIGHT = 0;
+        Color FOCUSED_BACKCOLOUR = Color.AliceBlue;
         bool dragging = false;
+        bool drag_happened = false;
         bool resizing = false;
         Point drag_start = new Point(0, 0);
         Size resize_start = new Size(0, 0);
         Point mouse_start = new Point(0, 0);
         Size previous_minimum_size = new Size(0, 0);
+        string focused_character = null;
+        Color focused_character_previous_backcolour;
+        Color focused_character_previous_forecolour;
+        bool _transform_locked = false;
+        bool transform_locked {
+            get { return _transform_locked; }
+            set 
+            {
+                _transform_locked = value;
+                if (value)
+                {
+                    leftresizepanel.Cursor = Cursors.Default;
+                    rightresizepanel.Cursor = Cursors.Default;
+                    lockDisplayToolStripMenuItem.Text = "Unlock Display";
+                }
+                else
+                {
+                    leftresizepanel.Cursor = Cursors.SizeWE;
+                    rightresizepanel.Cursor = Cursors.SizeWE;
+                    lockDisplayToolStripMenuItem.Text = "Lock Display";
+                }
+            }
+        }
+
+        HashSet<Keys> pressed_keys = new HashSet<Keys>();
+        LowLevelKeyboardHook keyboard_hook;
 
         DataView characters_view;
 
 
+        protected override bool ShowWithoutActivation {
+            get { return true; }
+        }
+
+        protected override CreateParams CreateParams {
+            get {
+                CreateParams baseParams = base.CreateParams;
+
+                const int WS_EX_NOACTIVATE = 0x08000000;
+                const int WS_EX_TOOLWINDOW = 0x00000080;
+                baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+
+                return baseParams;
+            }
+        }
+
+
+        private void focus_character(string name)
+        {
+            string previous_focused = focused_character;
+            foreach (Label label in characterlistpanel.Controls.OfType<Label>())
+            {
+                if (label.Text == previous_focused)
+                {
+                    label.BackColor = focused_character_previous_backcolour;
+                    label.ForeColor = focused_character_previous_forecolour;
+                }
+                if (label.Text == name)
+                {
+                    focused_character_previous_backcolour = label.BackColor;
+                    focused_character_previous_forecolour = label.ForeColor;
+                    label.BackColor = focused_character_previous_forecolour;
+                    label.ForeColor = focused_character_previous_backcolour;
+                    focused_character = name;
+                }
+            }
+            if (focused_character != name)
+            {
+                focused_character = null;
+            }
+        }
+
+        private string get_next_character()
+        {
+            if (characterlistpanel.Controls.Count <= 0) { return null; }
+            if (focused_character == null)
+            {
+                return ((Label)characterlistpanel.Controls[0]).Text;
+            }
+            bool flag = false;
+            for (int i = 0; i < characterlistpanel.Controls.Count; i++)
+            {
+                if (flag)
+                {
+                    return ((Label)characterlistpanel.Controls[i]).Text;
+                }
+                if (((Label)characterlistpanel.Controls[i]).Text == focused_character)
+                {
+                    flag = true;
+                }
+            }
+            return ((Label)characterlistpanel.Controls[0]).Text;
+        }
+
+        private void update_focus()
+        {
+            focus_character(get_next_character());
+        }
 
         private void populate_list()
         {
@@ -33,7 +134,8 @@ namespace Choreograph
             {
                 tmp.Add(create_character_label((string)character["name"]));
             }
-            tmp.Reverse();  // Have to do this because the list is bottom docked
+            tmp.Reverse();
+            focused_character = null;
             characterlistpanel.Controls.Clear();
             characterlistpanel.Controls.AddRange(tmp.ToArray());
             update_filter();
@@ -77,6 +179,30 @@ namespace Choreograph
             update_filter();
         }
 
+        private void check_key_combos()
+        {
+            foreach (Keys key in pressed_keys)
+            {
+                Console.Write(key + " | ");
+            }
+            Console.WriteLine("");
+            if (pressed_keys.Contains(Keys.LControlKey) && pressed_keys.Contains(Keys.Space))
+            {
+                update_focus();
+            }
+        }
+
+        private void global_key_pressed(object sender, Keys e)
+        {
+            pressed_keys.Add(e);
+            check_key_combos();
+        }
+
+        private void global_key_unpressed(object sender, Keys e)
+        {
+            pressed_keys.Remove(e);
+        }
+
         private void setup()
         {
             STARTING_HEIGHT = Size.Height;
@@ -86,17 +212,23 @@ namespace Choreograph
             characters_view.Sort = "roll, mod";
             characters_view.ListChanged += update_list;
             Storage.active_ids.ListChanged += update_filter;
+            keyboard_hook = new LowLevelKeyboardHook();
+            keyboard_hook.OnKeyPressed += global_key_pressed;
+            keyboard_hook.OnKeyUnpressed += global_key_unpressed;
+            keyboard_hook.HookKeyboard();
         }
 
-        public InitiativeDisplayForm()
+        public InitiativeDisplayForm(CloseDisplayFunction close_display)
         {
             InitializeComponent();
+            this.close_display = close_display;
             setup();
             populate_list();
         }
 
         private void InitiativeDisplayForm_MouseDown(object sender, MouseEventArgs e)
         {
+            if (transform_locked) { return; }
             dragging = true;
             drag_start = Location;
             mouse_start = MousePosition;
@@ -105,11 +237,25 @@ namespace Choreograph
         private void InitiativeDisplayForm_MouseUp(object sender, MouseEventArgs e)
         {
             dragging = false;
+            if (!drag_happened && ClientRectangle.Contains(e.Location))
+            {
+                switch (e.Button)
+                {
+                    case MouseButtons.Left:
+                        update_focus();
+                        break;
+                    case MouseButtons.Right:
+                        contextMenuStrip1.Show(MousePosition);
+                        break;
+                }
+            }
+            drag_happened = false;
         }
 
         private void InitiativeDisplayForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (!dragging) { return; }
+            drag_happened = true;
             Location = new Point(drag_start.X + MousePosition.X - mouse_start.X, drag_start.Y + MousePosition.Y - mouse_start.Y);
         }
 
@@ -119,15 +265,18 @@ namespace Choreograph
             Location = Properties.Settings.Default.DisplayFormLocation;
             Size = new Size(Properties.Settings.Default.DisplayFormSize.Width, Size.Height);
             MinimumSize = new Size(Properties.Settings.Default.DisplayFormSize.Width, MinimumSize.Height);
+            transform_locked = Properties.Settings.Default.DisplayFormTransformLock;
         }
 
         private void InitiativeDisplayForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            keyboard_hook.UnHookKeyboard();
             if (WindowState == FormWindowState.Normal)
             {
                 Properties.Settings.Default.DisplayFormLocation = Location;
                 Properties.Settings.Default.DisplayFormSize = Size;
             }
+            Properties.Settings.Default.DisplayFormTransformLock = transform_locked;
             Properties.Settings.Default.LoadDisplayFormSettings = true;
             Properties.Settings.Default.Save();
         }
@@ -151,6 +300,7 @@ namespace Choreograph
 
         private void resizepanel_MouseDown(object sender, MouseEventArgs e)
         {
+            if (transform_locked) { return; }
             resizing = true;
             drag_start = Location;
             resize_start = Size;
@@ -185,5 +335,14 @@ namespace Choreograph
             AutoSize = true;
         }
 
+        private void hideDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            close_display();
+        }
+
+        private void lockDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            transform_locked = !transform_locked;
+        }
     }
 }

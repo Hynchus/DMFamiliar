@@ -28,20 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InitiativeDisplayForm));
             this.titlelbl = new System.Windows.Forms.Label();
             this.characterlistpanel = new System.Windows.Forms.Panel();
             this.leftresizepanel = new System.Windows.Forms.Panel();
             this.rightresizepanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.lockDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.hideDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // titlelbl
             // 
             this.titlelbl.BackColor = System.Drawing.Color.Azure;
             this.titlelbl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.titlelbl.Font = new System.Drawing.Font("Verdana", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titlelbl.Font = new System.Drawing.Font("Verdana", 24F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titlelbl.Location = new System.Drawing.Point(3, 0);
             this.titlelbl.Name = "titlelbl";
             this.titlelbl.Size = new System.Drawing.Size(324, 69);
@@ -110,6 +116,35 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(330, 85);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lockDisplayToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.hideDisplayToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 70);
+            // 
+            // lockDisplayToolStripMenuItem
+            // 
+            this.lockDisplayToolStripMenuItem.Name = "lockDisplayToolStripMenuItem";
+            this.lockDisplayToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.lockDisplayToolStripMenuItem.Text = "Lock Display";
+            this.lockDisplayToolStripMenuItem.Click += new System.EventHandler(this.lockDisplayToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            // 
+            // hideDisplayToolStripMenuItem
+            // 
+            this.hideDisplayToolStripMenuItem.Name = "hideDisplayToolStripMenuItem";
+            this.hideDisplayToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.hideDisplayToolStripMenuItem.Text = "Hide Display";
+            this.hideDisplayToolStripMenuItem.Click += new System.EventHandler(this.hideDisplayToolStripMenuItem_Click);
+            // 
             // InitiativeDisplayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -138,6 +173,7 @@
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.InitiativeDisplayForm_MouseUp);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,5 +185,9 @@
         private System.Windows.Forms.Panel leftresizepanel;
         private System.Windows.Forms.Panel rightresizepanel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem lockDisplayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem hideDisplayToolStripMenuItem;
     }
 }
