@@ -15,14 +15,16 @@ namespace RollTheDice {
             public int maximum;
             public List<Mod> modifiers;
             public List<Die> dice;
+            public Color colour;
 
-            public Rule(string name, ResultCollection initial_possible_results, int initial_minimum, int initial_maximum, List<Mod> initial_modifiers, List<StructCollection.Die> initial_dice) {
+            public Rule(string name, ResultCollection initial_possible_results, int initial_minimum, int initial_maximum, List<Mod> initial_modifiers, List<StructCollection.Die> initial_dice, Color initial_colour) {
                 this.rule_name = name;
                 this.results = initial_possible_results;
                 this.minimum = initial_minimum;
                 this.maximum = initial_maximum;
                 this.modifiers = initial_modifiers;
                 this.dice = initial_dice;
+                this.colour = initial_colour;
             }
 
             public void Rename(string new_name) {
@@ -54,6 +56,10 @@ namespace RollTheDice {
                                     results.LoadXML(ref xml);
                                     continue;
                                 }
+                                else if (xml.Name == "colour")
+                                {
+                                    this.colour = ColorTranslator.FromHtml(xml["colour"]);
+                                }
                                 else {
                                     break;
                                 }
@@ -72,8 +78,16 @@ namespace RollTheDice {
                 WriteDiceXML(ref xml, this.dice);
                 WriteModifiersXML(ref xml, this.modifiers);
                 results.WriteXML(ref xml);
+                WriteColourXML(ref xml, this.colour);
                 xml.WriteEndElement();
             }
+        }
+
+        private static void WriteColourXML(ref XmlWriter xml, Color colour)
+        {
+            xml.WriteStartElement("colour");
+            xml.WriteAttributeString("colour", ColorTranslator.ToHtml(colour));
+            xml.WriteEndElement();
         }
 
         private static void WriteDiceXML(ref XmlWriter xml, List<Die> dice) {
@@ -219,7 +233,7 @@ namespace RollTheDice {
             public enum Type { Event, Damage };
             public Type type;
 
-            public virtual (string roll, string result, Color colour) Display(int roll_number, int roll_modifier) { return (roll: "", result: "", colour: Color.Yellow); }
+            public virtual (string roll, string result, Color colour) Display(int roll_number, int roll_modifier, Color? colour = null) { return (roll: "", result: "", colour: colour != null ? (Color)colour : Color.Yellow); }
 
             public virtual void LoadXML(ref XmlReader xml) { }
 
@@ -253,14 +267,15 @@ namespace RollTheDice {
                 this.modifiers = new List<Mod>();
             }
 
-            public override (string roll, string result, Color colour) Display(int roll_number, int roll_modifier) {
+            public override (string roll, string result, Color colour) Display(int roll_number, int roll_modifier, Color? colour = null) {
                 if (crit_success && roll_number >= crit_success_threshold) {
                     return (roll: ("Natural " + roll_number.ToString()), result: "Critical Hit!\n" + (DiceTower.RollDice(dice) + DiceTower.RollDice(dice) + DiceTower.SumModifiers(modifiers)).ToString() + " " + damage_type + " damage!", colour: Color.Blue);
                 }
                 else if (crit_fail && roll_number <= crit_fail_threshold) {
                     return (roll: ("Natural " + roll_number.ToString()), result: "Critical Fail!", colour: Color.Red);
                 }
-                return (roll: (roll_number + roll_modifier).ToString(), result: DiceTower.RollDice(dice, modifiers).ToString() + " " + damage_type + " damage", colour: Color.Green);
+
+                return (roll: (roll_number + roll_modifier).ToString(), result: DiceTower.RollDice(dice, modifiers).ToString() + " " + damage_type + " damage", colour: colour != null ? (Color)colour : Color.Green);
             }
 
             public override void LoadXML(ref XmlReader xml) {
@@ -322,8 +337,8 @@ namespace RollTheDice {
                 this.possible_results = new List<EventResult>();
             }
 
-            public override (string roll, string result, Color colour) Display(int roll_number, int roll_modifier) {
-                return (roll: (roll_number + roll_modifier).ToString(), result: possible_results.Find(x => x.roll_number == roll_number + roll_modifier).result_text, colour: Color.Yellow);
+            public override (string roll, string result, Color colour) Display(int roll_number, int roll_modifier, Color? colour = null) {
+                return (roll: (roll_number + roll_modifier).ToString(), result: possible_results.Find(x => x.roll_number == roll_number + roll_modifier).result_text, colour: colour != null ? (Color)colour : Color.Yellow);
             }
 
             public void StoreResult(EventResult result) {

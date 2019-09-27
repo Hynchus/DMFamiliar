@@ -72,12 +72,14 @@
             // RemoveButton
             // 
             this.RemoveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveButton.BackColor = System.Drawing.Color.IndianRed;
+            this.RemoveButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.RemoveButton.Location = new System.Drawing.Point(163, 4);
             this.RemoveButton.Name = "RemoveButton";
             this.RemoveButton.Size = new System.Drawing.Size(86, 35);
             this.RemoveButton.TabIndex = 3;
             this.RemoveButton.Text = "Remove";
-            this.RemoveButton.UseVisualStyleBackColor = true;
+            this.RemoveButton.UseVisualStyleBackColor = false;
             this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
             // DieControl

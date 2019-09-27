@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace RollTheDice {
     public partial class Main : Form {
+        public Color DEFAULT_RULE_COLOUR = Color.LightGray;
         bool hold_profiles_dropdown = false;
         ResultsDisplayForm results_display = null;
 
@@ -20,7 +21,7 @@ namespace RollTheDice {
         private void RefreshRuleButtons() {
             RuleLayout.Controls.Clear();
             foreach (string rule_name in Secretary.GetActiveProfile().rule_names) {
-                RuleLayout.Controls.Add(new RuleButton(this, rule_name));
+                RuleLayout.Controls.Add(new RuleButton(this, rule_name, Secretary.GetRule(rule_name).colour));
             }
         }
 
@@ -42,10 +43,10 @@ namespace RollTheDice {
 
         private void CreateNewRule(StructCollection.ResultCollection.Type type) {
             if (type == StructCollection.ResultCollection.Type.Event) {
-                ShowEditEventRule(new StructCollection.Rule("", new StructCollection.Events(), -1, -1, new List<StructCollection.Mod>(), new List<StructCollection.Die>()));
+                ShowEditEventRule(new StructCollection.Rule("", new StructCollection.Events(), -1, -1, new List<StructCollection.Mod>(), new List<StructCollection.Die>(), DEFAULT_RULE_COLOUR));
             }
             else if (type == StructCollection.ResultCollection.Type.Damage) {
-                ShowEditAttackRule(new StructCollection.Rule("", new StructCollection.Damage(), -1, -1, new List<StructCollection.Mod>(), new List<StructCollection.Die>()));
+                ShowEditAttackRule(new StructCollection.Rule("", new StructCollection.Damage(), -1, -1, new List<StructCollection.Mod>(), new List<StructCollection.Die>(), DEFAULT_RULE_COLOUR));
             }
         }
 
@@ -92,13 +93,18 @@ namespace RollTheDice {
         }
 
         private void Main_Load(object sender, EventArgs e) {
-            this.Location = Properties.Settings.Default.MainFormLocation;
-            this.Size = Properties.Settings.Default.MainFormSize;
-            if (Properties.Settings.Default.MainFormState == FormWindowState.Maximized) {
-                this.WindowState = FormWindowState.Maximized;
-            }
-            else {
-                this.WindowState = FormWindowState.Normal;
+            if (Properties.Settings.Default.LoadMainFormSettings)
+            {
+                this.Location = Properties.Settings.Default.MainFormLocation;
+                this.Size = Properties.Settings.Default.MainFormSize;
+                if (Properties.Settings.Default.MainFormState == FormWindowState.Maximized)
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
             }
             SetupProfiles();
             RefreshRuleButtons();
@@ -125,24 +131,40 @@ namespace RollTheDice {
                 Properties.Settings.Default.MainFormLocation = this.RestoreBounds.Location;
                 Properties.Settings.Default.MainFormSize = this.RestoreBounds.Size;
             }
+            Properties.Settings.Default.LoadMainFormSettings = true;
             Properties.Settings.Default.Save();
+            try
+            {
+                results_display.Close();
+            }
+            catch (Exception)
+            {
+                // ignore exception, either it closes or it doesn't exist
+            }
+        }
+
+        private void OpenDisplay()
+        {
+            if (results_display == null)
+            {
+                results_display = new ResultsDisplayForm(this);
+                results_display.Show();
+            }
+            results_display.BringToFront();
+            this.BringToFront();
         }
 
         public void DisplayDieRoll(int count, int faces) {
-            if (results_display == null) {
-                results_display = new ResultsDisplayForm(this);
-            }
+            OpenDisplay();
             results_display.AddRollDisplay(new RollDisplay(DiceTower.RollDie(count, faces), 0, count.ToString() + "d" + faces.ToString()));
-            results_display.Show();
+            this.Focus();
         }
 
         public void DisplayRuleRoll(string rule_name) {
             StructCollection.Rule rule = Secretary.GetRule(rule_name);
-            if (results_display == null) {
-                results_display = new ResultsDisplayForm(this);
-            }
+            OpenDisplay();
             results_display.AddRollDisplay(new RollDisplay(DiceTower.RollDice(rule.dice), DiceTower.SumModifiers(rule.modifiers), rule));
-            results_display.Show();
+            this.Focus();
         }
 
         public void NullResultsDisplay() {

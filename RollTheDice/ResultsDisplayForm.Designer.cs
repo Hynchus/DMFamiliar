@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResultsDisplayForm));
             this.DisplayFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
@@ -37,7 +38,7 @@
             this.DisplayFlowLayout.Location = new System.Drawing.Point(14, 14);
             this.DisplayFlowLayout.Name = "DisplayFlowLayout";
             this.DisplayFlowLayout.Padding = new System.Windows.Forms.Padding(2);
-            this.DisplayFlowLayout.Size = new System.Drawing.Size(664, 180);
+            this.DisplayFlowLayout.Size = new System.Drawing.Size(664, 176);
             this.DisplayFlowLayout.TabIndex = 0;
             this.DisplayFlowLayout.WrapContents = false;
             // 
@@ -45,12 +46,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 210);
+            this.ClientSize = new System.Drawing.Size(692, 206);
             this.Controls.Add(this.DisplayFlowLayout);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(714, 5000);
             this.MinimumSize = new System.Drawing.Size(714, 260);
             this.Name = "ResultsDisplayForm";
             this.Padding = new System.Windows.Forms.Padding(14);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Results";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ResultsDisplayForm_FormClosing);
             this.Load += new System.EventHandler(this.ResultsDisplayForm_Load);

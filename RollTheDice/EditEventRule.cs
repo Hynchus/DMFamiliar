@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace RollTheDice {
     public partial class EditEventRule : RuleEditor {
-
+        ColorDialog colour_dialog = new ColorDialog();
         private int current_minimum = -1;
         private int current_maximum = -1;
 
@@ -19,6 +19,7 @@ namespace RollTheDice {
         private void LoadRule(StructCollection.Rule rule) {
             loading = true;
             current_rule = rule;
+            colourbtn.BackColor = current_rule.colour;
             LoadTextboxes(rule);
             LoadDice(rule);
             LoadModifiers(rule);
@@ -197,6 +198,16 @@ namespace RollTheDice {
 
         protected override void RuleForm_Closing(object sender, FormClosingEventArgs e) {
             base.RuleForm_Closing(sender, e);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            colour_dialog.Color = current_rule.colour;
+            if (colour_dialog.ShowDialog() == DialogResult.OK)
+            {
+                current_rule.colour = colour_dialog.Color;
+                colourbtn.BackColor = colour_dialog.Color;
+            }
         }
     }
 }

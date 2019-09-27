@@ -23,10 +23,10 @@ namespace RollTheDice {
 
         private void button1_Click(object sender, EventArgs e) {
             List<string> selected_rules = new List<string>();
-            selected_rules.Concat(DamageRulesListbox.SelectedItems.Cast<string>());
-            selected_rules.Concat(EventRulesListbox.SelectedItems.Cast<string>());
+            selected_rules.AddRange(DamageRulesListbox.SelectedItems.Cast<string>());
+            selected_rules.AddRange(EventRulesListbox.SelectedItems.Cast<string>());
             if (selected_rules.Count <= 0) {
-                MessageBox.Show("No rule selected for import.");
+                MessageBox.Show(this, "No rule selected for import.");
                 return;
             }
             foreach (string selected_rule in selected_rules) {
@@ -36,13 +36,18 @@ namespace RollTheDice {
         }
 
         private void ImportRules_Load(object sender, EventArgs e) {
-            this.Location = Properties.Settings.Default.ImportRuleFormLocation;
-            this.Size = Properties.Settings.Default.ImportRuleFormSize;
-            if (Properties.Settings.Default.ImportRuleFormState == FormWindowState.Maximized) {
-                this.WindowState = FormWindowState.Maximized;
-            }
-            else {
-                this.WindowState = FormWindowState.Normal;
+            if (Properties.Settings.Default.LoadImportFormSettings)
+            {
+                this.Location = Properties.Settings.Default.ImportRuleFormLocation;
+                this.Size = Properties.Settings.Default.ImportRuleFormSize;
+                if (Properties.Settings.Default.ImportRuleFormState == FormWindowState.Maximized)
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
             }
 
             this.Text = "Import Rules to " + profile.profile_name;
@@ -76,6 +81,7 @@ namespace RollTheDice {
                 Properties.Settings.Default.ImportRuleFormLocation = this.RestoreBounds.Location;
                 Properties.Settings.Default.ImportRuleFormSize = this.RestoreBounds.Size;
             }
+            Properties.Settings.Default.LoadImportFormSettings = true;
             Properties.Settings.Default.Save();
         }
 

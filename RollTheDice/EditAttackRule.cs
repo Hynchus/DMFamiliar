@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace RollTheDice {
     public partial class EditAttackRule : RuleEditor {
-
+        ColorDialog colour_dialog = new ColorDialog();
 
         private bool IsNewRule() {
             return starting_rule_name == "";
@@ -68,6 +68,7 @@ namespace RollTheDice {
         private void LoadRule(StructCollection.Rule rule) {
             loading = true;
             current_rule = rule;
+            colourbtn.BackColor = current_rule.colour;
             LoadTextboxes(rule);
             LoadDice(rule);
             LoadModifiers(rule);
@@ -256,6 +257,16 @@ namespace RollTheDice {
         private void CriticalFailThresholdTextbox_Leave(object sender, EventArgs e) {
             if (Convert.ToInt16(CriticalFailThresholdTextbox.Text) >= Convert.ToInt16(CriticalSuccessThresholdTextbox.Text)) {
                 CriticalFailThresholdTextbox.Text = (Convert.ToInt16(CriticalSuccessThresholdTextbox.Text) - 1).ToString();
+            }
+        }
+
+        private void colourbtn_Click(object sender, EventArgs e)
+        {
+            colour_dialog.Color = current_rule.colour;
+            if (colour_dialog.ShowDialog() == DialogResult.OK)
+            {
+                current_rule.colour = colour_dialog.Color;
+                colourbtn.BackColor = colour_dialog.Color;
             }
         }
     }

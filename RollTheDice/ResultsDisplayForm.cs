@@ -17,10 +17,20 @@ namespace RollTheDice {
             this.owner = owner;
         }
 
+        private void cull_displays(int threshold)
+        {
+            threshold = Math.Max(0, threshold);
+            for (int i = DisplayFlowLayout.Controls.Count - 1 - threshold; i >= 0; i--)
+            {
+                DisplayFlowLayout.Controls.RemoveAt(i);
+            }
+        }
+
         public void AddRollDisplay(RollDisplay roll_display) {
             roll_display.Flash();
             DisplayFlowLayout.Controls.Add(roll_display);
-            DisplayFlowLayout.Controls[DisplayFlowLayout.Controls.Count - 1].Focus();
+            cull_displays(50);
+            DisplayFlowLayout.Controls[DisplayFlowLayout.Controls.Count - 1].Focus();   // <-- Having this uncommented prevents weirdness with scrollbar for some reason
             DisplayFlowLayout.ScrollControlIntoView(roll_display);
         }
 
@@ -34,19 +44,25 @@ namespace RollTheDice {
                 Properties.Settings.Default.DisplayFormLocation = this.RestoreBounds.Location;
                 Properties.Settings.Default.DisplayFormSize = this.RestoreBounds.Size;
             }
+            Properties.Settings.Default.LoadDisplayFormSettings = true;
             Properties.Settings.Default.Save();
 
             owner.NullResultsDisplay();
         }
 
         private void ResultsDisplayForm_Load(object sender, EventArgs e) {
-            this.Location = Properties.Settings.Default.DisplayFormLocation;
-            this.Size = Properties.Settings.Default.DisplayFormSize;
-            if (Properties.Settings.Default.DisplayFormState == FormWindowState.Maximized) {
-                this.WindowState = FormWindowState.Maximized;
-            }
-            else {
-                this.WindowState = FormWindowState.Normal;
+            if (Properties.Settings.Default.LoadDisplayFormSettings)
+            {
+                this.Location = Properties.Settings.Default.DisplayFormLocation;
+                this.Size = Properties.Settings.Default.DisplayFormSize;
+                if (Properties.Settings.Default.DisplayFormState == FormWindowState.Maximized)
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
             }
         }
     }
