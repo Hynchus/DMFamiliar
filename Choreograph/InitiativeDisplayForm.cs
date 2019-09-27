@@ -181,11 +181,6 @@ namespace Choreograph
 
         private void check_key_combos()
         {
-            foreach (Keys key in pressed_keys)
-            {
-                Console.Write(key + " | ");
-            }
-            Console.WriteLine("");
             if (pressed_keys.Contains(Keys.LControlKey) && pressed_keys.Contains(Keys.Space))
             {
                 update_focus();
