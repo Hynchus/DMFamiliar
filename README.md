@@ -1,5 +1,6 @@
 # DMFamiliar
 Collection of simple tools for tabletop roleplaying games.
+ - Running DMFamiliar.exe will put an icon in your taskbar. Click this icon to access DM tools.
 
 Contains two tools:
 
