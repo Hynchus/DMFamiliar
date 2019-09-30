@@ -94,17 +94,6 @@ namespace Choreograph
             lockbox.DataBindings.Add(lock_image_binding);
 
             update_removebtn((string)character_view[0].Row["name"]);
-            /*
-            removebtn.DataBindings.Clear();
-            Binding remove_image_binding = new Binding("BackgroundImage", character_view, "name");
-            remove_image_binding.DataSourceUpdateMode = DataSourceUpdateMode.Never;
-            remove_image_binding.Format += name_to_removeimage;
-            removebtn.DataBindings.Add(remove_image_binding);
-            Binding remove_tooltip_binding = new Binding("ToolTip on toolTip1", character_view, "name");
-            remove_tooltip_binding.DataSourceUpdateMode = DataSourceUpdateMode.Never;
-            remove_tooltip_binding.Format += name_to_removetooltip;
-            removebtn.DataBindings.Add(remove_tooltip_binding);
-            */
         }
 
         private void set_remove_button()

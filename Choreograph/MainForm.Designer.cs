@@ -37,7 +37,7 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.filtertb = new System.Windows.Forms.TextBox();
+            this.filtertb = new Choreograph.HintTextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.inactivecharacterspanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -174,13 +174,17 @@
             // 
             // filtertb
             // 
+            this.filtertb.BackColor = System.Drawing.Color.White;
             this.filtertb.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.filtertb.Font = new System.Drawing.Font("Trebuchet MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filtertb.ForeColor = System.Drawing.Color.Gray;
+            this.filtertb.Hint = "Filter";
             this.filtertb.Location = new System.Drawing.Point(2, 9);
             this.filtertb.Margin = new System.Windows.Forms.Padding(2);
             this.filtertb.Name = "filtertb";
             this.filtertb.Size = new System.Drawing.Size(190, 31);
             this.filtertb.TabIndex = 0;
+            this.filtertb.Text = "Filter";
             this.filtertb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.filtertb.TextChanged += new System.EventHandler(this.filtertb_TextChanged);
             // 
@@ -318,7 +322,6 @@
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -334,7 +337,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TextBox filtertb;
+        private HintTextBox filtertb;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Button rollbtn;
