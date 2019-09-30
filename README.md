@@ -10,7 +10,7 @@ Features
  - Easily roll battle initiative and track turn order for all involved characters
  - Quickly add a character by inputing a name and initiative modifier! Optionally set and lock its initiative for direct control.
  - Effortlessly select which characters are involved each combat. A list of previously used characters is at your disposal!
- - Display a widget showing turn order; this display stays on top of all windows, so manipulate your tokens on Roll20 with initiative only an eye-swivel away!
+ - Display a widget showing turn order; this display stays on top of all windows, so manipulate your tokens on Roll20 with initiative only an eye-swivel away! Right click the widget to change its appearance.
  - [Synonym for easily] progress turn order by clicking on the display widget or by pressing CTRL + Space.
  
 
@@ -28,7 +28,6 @@ Features
 # Planned Features
 
 ## Choreograph
- - Add cosmetic options; colours on display widget, fonts, hopefully background images for widget
  
  
  ## Roll The Dice
