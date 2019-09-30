@@ -1,4 +1,4 @@
-#Installation
+# Installation
 You can find the latest release here: https://github.com/Hynchus/DMFamiliar/releases/latest
 
 # DMFamiliar
