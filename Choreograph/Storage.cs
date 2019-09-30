@@ -9,52 +9,138 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.CompilerServices;
+
 
 namespace Choreograph
 {
-    [Serializable()]
-    public struct Character {
-        public string id { get; }
-        public string name { get; set; }
-        public int mod { get; set; }
-        public int roll { get; set; }
-        public bool locked { get; set; }
+    [Serializable]
+    class DisplaySettings : INotifyPropertyChanged
+    {
+        string _title_text = "Initiative";
+        Font _title_font = new Font("Verdana", 24);
+        Color _title_font_colour = Color.Black;
+        Font _characters_font = new Font("Trebuchet MS", 20);
+        Color _characters_font_colour = Color.Black;
+        Color _background_colour = Color.White;
+        float _border_opacity = 0.5f;
 
-        public Character(string name = "", int mod = 0, int roll = 0, bool locked = false)
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [field: NonSerialized]
+        private void notify_property_changed([CallerMemberName] string property_name = "")
         {
-            this.id = Guid.NewGuid().ToString();
-            this.name = name;
-            this.mod = mod;
-            this.roll = roll;
-            this.locked = locked;
+            PropertyChangedEventHandler tmp = PropertyChanged;   // StackOverflow said this was a good idea to prevent race condition
+            if (tmp != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(property_name));
+            }
+        }
+
+        [field: NonSerialized]
+        public string TitleText {
+            get { return _title_text; }
+            set {
+                _title_text = value;
+                notify_property_changed();
+            }
+        }
+
+        [field: NonSerialized]
+        public Color TitleFontColour {
+            get { return _title_font_colour; }
+            set {
+                _title_font_colour = value;
+                notify_property_changed();
+            }
+        }
+
+        [field: NonSerialized]
+        public Font TitleFont {
+            get { return _title_font; }
+            set {
+                _title_font = value;
+                notify_property_changed();
+            }
+        }
+
+        [field: NonSerialized]
+        public Color CharactersFontColour {
+            get { return _characters_font_colour; }
+            set {
+                _characters_font_colour = value;
+                notify_property_changed();
+            }
+        }
+
+        [field: NonSerialized]
+        public Font CharactersFont {
+            get { return _characters_font; }
+            set {
+                _characters_font = value;
+                notify_property_changed();
+            }
+        }
+
+        [field: NonSerialized]
+        public Color BackgroundColour {
+            get { return _background_colour; }
+            set {
+                _background_colour = value;
+                notify_property_changed();
+            }
+        }
+
+        [field: NonSerialized]
+        public float BorderOpacity {
+            get { return _border_opacity; }
+            set {
+                _border_opacity = value;
+                notify_property_changed();
+            }
         }
     }
 
-    
+    [Serializable]
+    class HotkeyDictionary
+    {
+        // Just realized this is unnecessary, but leaving in for now
+    }
+
 
     static class Storage
     {
         private static string SAVE_FOLDER = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Choreograph");
         private static string CHARACTERS_SAVE_FILE = System.IO.Path.Combine(SAVE_FOLDER, "characters.dmf");
         private static string ACTIVES_SAVE_FILE = System.IO.Path.Combine(SAVE_FOLDER, "actives.dmf");
+        private static string SETTINGS_SAVE_FILE = System.IO.Path.Combine(SAVE_FOLDER, "display_settings.dmf");
+        //private static string HOTKEYS_SAVE_FILE = System.IO.Path.Combine(SAVE_FOLDER, "hotkeys.dmf");
 
         public static DataTable characters;
 
         public static BindingList<string> active_ids { get; set; }
 
+        public static DisplaySettings settings;
+
 
         private static object read_file(string filename)
         {
-            if (!File.Exists(filename))
+            try
             {
-                return null;
+                using (var stream = new StreamReader(filename))
+                {
+                    var formatter = new BinaryFormatter();
+                    var contents = formatter.Deserialize(stream.BaseStream);
+                    return contents;
+                }
             }
-            using (var stream = new StreamReader(filename))
+            catch
             {
-                var formatter = new BinaryFormatter();
-                var contents = formatter.Deserialize(stream.BaseStream);
-                return contents;
+                // Missing or corrupted file, we'll ignore
             }
+            return null;
         }
 
         private static bool write_file(string filename, object contents)
@@ -70,7 +156,7 @@ namespace Choreograph
                 return true;
             }
             catch (Exception ex) {
-
+                File.Delete(filename);
             }
             return false;
         }
@@ -140,6 +226,11 @@ namespace Choreograph
             {
                 active_ids = new BindingList<string>();
             }
+            settings = (DisplaySettings)read_file(SETTINGS_SAVE_FILE);
+            if (settings == null)
+            {
+                settings = new DisplaySettings();
+            }
         }
 
         public static void purge_characters()
@@ -168,6 +259,10 @@ namespace Choreograph
                 return false;
             }
             if (!write_file(ACTIVES_SAVE_FILE, active_ids))
+            {
+                return false;
+            }
+            if (!write_file(SETTINGS_SAVE_FILE, settings))
             {
                 return false;
             }

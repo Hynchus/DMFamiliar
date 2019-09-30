@@ -67,7 +67,6 @@ namespace Choreograph
             AutoSize = false;
             Location = new Point(0, 0);
             Size = this.Size;
-            BackColor = Color.Red;
             Anchor = (AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top);
             ForeColor = HintForecolor;
 
@@ -111,6 +110,23 @@ namespace Choreograph
             {
                 disable_hint();
                 Text = "";
+            }
+        }
+
+        private void HintTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                e.Handled = true;
+                foreach (Binding binding in DataBindings)
+                {
+                    if (binding.PropertyName == "Text")
+                    {
+                        binding.WriteValue();
+                        // This is bad but WriteValue alone doesn't notify changes
+                        Storage.characters.AcceptChanges();
+                    }
+                }
             }
         }
     }

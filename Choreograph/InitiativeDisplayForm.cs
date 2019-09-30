@@ -38,16 +38,17 @@ namespace Choreograph
                 _transform_locked = value;
                 if (value)
                 {
-                    leftresizepanel.Cursor = Cursors.Default;
-                    rightresizepanel.Cursor = Cursors.Default;
+                    leftborder.Cursor = Cursors.Default;
+                    rightborder.Cursor = Cursors.Default;
                     lockDisplayToolStripMenuItem.Text = "Unlock Display";
                 }
                 else
                 {
-                    leftresizepanel.Cursor = Cursors.SizeWE;
-                    rightresizepanel.Cursor = Cursors.SizeWE;
+                    leftborder.Cursor = Cursors.SizeWE;
+                    rightborder.Cursor = Cursors.SizeWE;
                     lockDisplayToolStripMenuItem.Text = "Lock Display";
                 }
+                
             }
         }
 
@@ -89,7 +90,7 @@ namespace Choreograph
                     focused_character_previous_backcolour = label.BackColor;
                     focused_character_previous_forecolour = label.ForeColor;
                     label.BackColor = focused_character_previous_forecolour;
-                    label.ForeColor = focused_character_previous_backcolour;
+                    label.ForeColor = BackColor;
                     focused_character = name;
                 }
             }
@@ -198,6 +199,85 @@ namespace Choreograph
             pressed_keys.Remove(e);
         }
 
+        private void refresh_title_text()
+        {
+            SuspendLayout();
+            titlelbl.Text = Storage.settings.TitleText;
+            titlelbl.Dock = DockStyle.Bottom;
+            titlelbl.Font = Storage.settings.TitleFont;
+            titlelbl.ForeColor = Storage.settings.TitleFontColour;
+            if (Storage.settings.TitleText.Trim() == "")
+            {
+                titlelbl.Size = new Size(titlelbl.Size.Width, 0);
+            }
+            else
+            {
+                titlelbl.Size = new Size(titlelbl.Size.Width, (int)(titlelbl.Font.Size * 2));
+            }
+            Refresh();
+            ResumeLayout();
+        }
+
+        private void update_border_opacity()
+        {
+            Image updated_border = Utilities.SetImageOpacity(Properties.Resources.border, Storage.settings.BorderOpacity);
+            leftborder.BackgroundImage = updated_border;
+            topborder.BackgroundImage = updated_border;
+            rightborder.BackgroundImage = updated_border;
+            bottomborder.BackgroundImage = updated_border;
+        }
+
+        private void load_cosmetics()
+        {
+            refresh_title_text();
+            titlelbl.ForeColor = Storage.settings.TitleFontColour;
+            BackColor = Storage.settings.BackgroundColour;
+            update_border_opacity();
+            // Gets erased when I put this directly in designer file, so here it goes
+            Controls.SetChildIndex(topborder, 0);
+            Controls.SetChildIndex(rightborder, 0);
+            Controls.SetChildIndex(bottomborder, 0);
+            Controls.SetChildIndex(leftborder, 0);
+        }
+
+        private void change_characters_font(Font font, Color font_colour)
+        {
+            foreach (Control character_control in characterlistpanel.Controls)
+            {
+                character_control.Font = font;
+                character_control.ForeColor = font_colour;
+            }
+        }
+
+        // Have to do this manually because the Bindings aren't notifying; I can't figure out why
+        private void handle_settings_changed(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "DisplayTitleText":
+                    titlelbl.Text = Storage.settings.TitleText;
+                    titletextbox.Text = Storage.settings.TitleText;
+                    refresh_title_text();
+                    break;
+                case "DisplayTitleFont":
+                    refresh_title_text();
+                    break;
+                case "DisplayTitleFontColour":
+                    titlelbl.ForeColor = Storage.settings.TitleFontColour;
+                    break;
+                case "DisplayCharactersFont":
+                case "DisplayCharactersFontColour":
+                    change_characters_font(Storage.settings.CharactersFont, Storage.settings.CharactersFontColour);
+                    break;
+                case "DisplayBackgroundColour":
+                    BackColor = Storage.settings.BackgroundColour;
+                    break;
+                case "DisplayBorderOpacity":
+                    update_border_opacity();
+                    break;
+            }
+        }
+
         private void setup()
         {
             STARTING_HEIGHT = Size.Height;
@@ -211,6 +291,8 @@ namespace Choreograph
             keyboard_hook.OnKeyPressed += global_key_pressed;
             keyboard_hook.OnKeyUnpressed += global_key_unpressed;
             keyboard_hook.HookKeyboard();
+            load_cosmetics();
+            Storage.settings.PropertyChanged += handle_settings_changed;
         }
 
         public InitiativeDisplayForm(CloseDisplayFunction close_display)
@@ -223,6 +305,7 @@ namespace Choreograph
 
         private void InitiativeDisplayForm_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Left) { return; }
             if (transform_locked) { return; }
             dragging = true;
             drag_start = Location;
@@ -279,12 +362,13 @@ namespace Choreograph
         private Label create_character_label(string character_name)
         {
             Label character_label = new Label();
-            character_label.Margin = new Padding(3, 10, 3, 0);
-            //character_label.AutoSize = false;
+            character_label.Margin = new Padding(0, 10, 0, 0);
+            character_label.BackColor = Color.Transparent;
             character_label.Dock = DockStyle.Bottom;
-            character_label.Font = new Font("TrebuchetMS", 20);
+            character_label.Font = Storage.settings.CharactersFont;
+            character_label.ForeColor = Storage.settings.CharactersFontColour;
             character_label.Size = new Size(character_label.Size.Width, (int)(character_label.Font.Size * 2));
-            character_label.TextAlign = ContentAlignment.MiddleCenter;
+            character_label.TextAlign = ContentAlignment.TopCenter;
             character_label.Text = character_name;
             character_label.MouseDown += InitiativeDisplayForm_MouseDown;
             character_label.MouseMove += InitiativeDisplayForm_MouseMove;
@@ -338,6 +422,82 @@ namespace Choreograph
         private void lockDisplayToolStripMenuItem_Click(object sender, EventArgs e)
         {
             transform_locked = !transform_locked;
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fontDialog1.Font = Storage.settings.TitleFont;
+            if (fontDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Storage.settings.TitleFont = fontDialog1.Font;
+            }
+        }
+
+        private void fontToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            fontDialog1.Font = Storage.settings.CharactersFont;
+            if (fontDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Storage.settings.CharactersFont = fontDialog1.Font;
+            }
+            populate_list();
+        }
+
+        private void colourToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = Storage.settings.BackgroundColour;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Storage.settings.BackgroundColour = colorDialog1.Color;
+            }
+        }
+
+        private void titletextbox_TextChanged(object sender, EventArgs e)
+        {
+            Storage.settings.TitleText = titletextbox.Text;
+        }
+
+        private void colourToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            colorDialog1.Color = Storage.settings.TitleFontColour;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Storage.settings.TitleFontColour = colorDialog1.Color;
+            }
+        }
+
+        private void colourToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = Storage.settings.CharactersFontColour;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Storage.settings.CharactersFontColour = colorDialog1.Color;
+            }
+        }
+
+        private void textbox_keypress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                contextMenuStrip1.Close();
+                e.Handled = true;
+            }
+        }
+
+        private void opacityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            void on_value_change(int value)
+            {
+                Storage.settings.BorderOpacity = (float)((float)value * 0.01);
+            }
+            float old_value = Storage.settings.BorderOpacity;
+            SliderForm slider_form = new SliderForm(on_value_change, (int)(Storage.settings.BorderOpacity * 100), "Border Opacity");
+            {
+                if (slider_form.ShowDialog() != DialogResult.OK)
+                {
+                    Storage.settings.BorderOpacity = old_value;
+                }
+            }
         }
     }
 }

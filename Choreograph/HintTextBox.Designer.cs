@@ -32,8 +32,8 @@
             // 
             // HintTextBox
             // 
-            this.Name = "HintTextBox";
             this.Size = new System.Drawing.Size(328, 26);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HintTextBox_KeyPress);
             this.ResumeLayout(false);
 
         }
