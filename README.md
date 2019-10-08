@@ -36,3 +36,4 @@ Features
  ## Roll The Dice
  - Improve Profile selection; sort alphabetically (rather than chronologically), and implement a filter
  - Expand rules options; handle things such as multi-attacks, attacks with multiple damage types 
+ - Change UI to accommodate multiple simultaneous active profiles
