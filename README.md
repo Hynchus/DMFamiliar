@@ -5,8 +5,6 @@ You can find the latest release here: https://github.com/Hynchus/DMFamiliar/rele
 
 # DMFamiliar
 Collection of simple tools for tabletop roleplaying games.
- - You should get warnings about this program being from an unrecognized publisher because I am an unrecognized publisher. But I promise this software is not harmful.
- - Running DMFamiliar.exe will put an icon in your taskbar. Click this icon to access DM tools.
 
 Contains two tools:
 
