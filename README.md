@@ -1,5 +1,5 @@
 # Installation
-You can find the latest release here: https://github.com/Hynchus/DMFamiliar/releases/latest
+You can find the latest release here: https://github.com/Hynchus/DMFamiliar/releases/latest.
 You should get warnings about this program being from an unrecognized publisher, however this software is not harmful.
 Running DMFamiliar.exe will put an icon in your taskbar. Click this icon to access DM tools.
 
