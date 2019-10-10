@@ -37,6 +37,7 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.filtertb = new Choreograph.HintTextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.inactivecharacterspanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -54,7 +55,6 @@
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filtertb = new Choreograph.HintTextBox();
             this.storageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.storageBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -190,6 +190,23 @@
             this.tableLayoutPanel2.TabIndex = 0;
             this.tableLayoutPanel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pass_mouseclick_to_form);
             // 
+            // filtertb
+            // 
+            this.filtertb.BackColor = System.Drawing.Color.White;
+            this.filtertb.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.filtertb.Font = new System.Drawing.Font("Trebuchet MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filtertb.ForeColor = System.Drawing.Color.Gray;
+            this.filtertb.Hint = "Filter";
+            this.filtertb.Location = new System.Drawing.Point(2, 9);
+            this.filtertb.Margin = new System.Windows.Forms.Padding(2);
+            this.filtertb.Name = "filtertb";
+            this.filtertb.Size = new System.Drawing.Size(190, 31);
+            this.filtertb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnValidation;
+            this.filtertb.TabIndex = 0;
+            this.filtertb.Text = "Filter";
+            this.filtertb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.filtertb.TextChanged += new System.EventHandler(this.filtertb_TextChanged);
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
@@ -308,7 +325,7 @@
             this.toolStripSeparator1,
             this.clearAllActiveCharactersToolStripMenuItem});
             this.activecharactersmenustrip.Name = "activecharactersmenustrip";
-            this.activecharactersmenustrip.Size = new System.Drawing.Size(289, 103);
+            this.activecharactersmenustrip.Size = new System.Drawing.Size(289, 70);
             // 
             // newCharacterToolStripMenuItem
             // 
@@ -335,7 +352,7 @@
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Choreograph";
             this.notifyIcon.Visible = true;
-            this.notifyIcon.DoubleClick += new System.EventHandler(this.notifyIcon_DoubleClick);
+            this.notifyIcon.DoubleClick += new System.EventHandler(this.notifyIcon_MouseDoubleClick);
             // 
             // trayiconmenustrip
             // 
@@ -365,23 +382,6 @@
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(128, 30);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
-            // 
-            // filtertb
-            // 
-            this.filtertb.BackColor = System.Drawing.Color.White;
-            this.filtertb.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.filtertb.Font = new System.Drawing.Font("Trebuchet MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtertb.ForeColor = System.Drawing.Color.Gray;
-            this.filtertb.Hint = "Filter";
-            this.filtertb.Location = new System.Drawing.Point(2, 9);
-            this.filtertb.Margin = new System.Windows.Forms.Padding(2);
-            this.filtertb.Name = "filtertb";
-            this.filtertb.Size = new System.Drawing.Size(190, 31);
-            this.filtertb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnValidation;
-            this.filtertb.TabIndex = 0;
-            this.filtertb.Text = "Filter";
-            this.filtertb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.filtertb.TextChanged += new System.EventHandler(this.filtertb_TextChanged);
             // 
             // storageBindingSource
             // 
