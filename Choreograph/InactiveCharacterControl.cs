@@ -41,7 +41,7 @@ namespace Choreograph
                 this.Parent.Controls.Remove(this);
                 return;
             }
-            if (!((string)character_view[0]["name"]).Contains(filter) || Storage.active_ids.Contains(id))
+            if (!((string)character_view[0]["name"]).ToLower().Contains(filter.ToLower()) || Storage.active_ids.Contains(id))
             {
                 Visible = false;
             }

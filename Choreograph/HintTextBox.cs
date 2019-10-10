@@ -10,57 +10,113 @@ using System.Windows.Forms;
 
 namespace Choreograph
 {
-    public partial class HintTextBox : TextBox
+    public partial class HintTextBox : TextBox, INotifyPropertyChanged
     {
+        private DataSourceUpdateMode _source_update_mode = DataSourceUpdateMode.OnValidation;
+        public DataSourceUpdateMode SourceUpdateMode {
+            get { return _source_update_mode; }
+            set { _source_update_mode = value; }
+        }
+        public Unfocus Unfocus = null;
         private Color starting_forecolour;
         public Color HintForecolor = Color.Gray;
         private bool hint_active = false;
-        private bool hint_flag = false;
         private string _hint = "";
         public string Hint {
             get { return _hint; }
             set {
                 _hint = value;
-                if (hint_active)
+                if (!show_hint())
                 {
-                    hint_flag = true;
-                    Text = value;
+                    disable_hint();
                 }
-                else if (show_hint())
+            }
+        }
+        private string _text = "";
+
+        public new string Text {
+            get => _text;
+            set {
+                if (_text != value)
                 {
-                    enable_hint();
+                    if (value == null)
+                    {
+                        _text = "";
+                    }
+                    else
+                    {
+                        _text = value;
+                        OnPropertyChanged(nameof(Text));
+                    }
                 }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        protected virtual void OnPropertyChanged(string property_name)
+        {
+            PropertyChangedEventHandler property_changed = PropertyChanged;
+            if (property_changed != null)
+            {
+                property_changed(this, new PropertyChangedEventArgs(property_name));
             }
         }
 
         protected override void OnTextChanged(EventArgs e)
         {
-            if (!Focused)
+            if (!hint_active)
             {
-                if (show_hint())
-                {
-                    enable_hint();
-                    return;
-                }
-                if (hint_flag)
-                {
-                    hint_flag = false;
-                    return;
-                }
+                Text = base.Text;
             }
-            disable_hint();
             base.OnTextChanged(e);
         }
 
-        private void test(object sender, EventArgs e)
+        protected override void OnValidated(EventArgs e)
         {
-            var tmp = e;
+            if (SourceUpdateMode == DataSourceUpdateMode.OnValidation)
+            {
+                push_text_change();
+            }
+            base.OnValidated(e);
         }
 
-        public HintTextBox()
+        private void push_text_change()
+        {
+            foreach (Binding binding in DataBindings)
+            {
+                if (binding.PropertyName == nameof(Text))
+                {
+                    binding.WriteValue();
+
+                    // This is very bad but WriteValue alone doesn't notify changes
+                    Storage.characters.AcceptChanges();
+                }
+            }
+        }
+
+        private void handle_property_changed(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Text))
+            {
+                if (!show_hint())
+                {
+                    disable_hint();
+                }
+                
+                if (SourceUpdateMode == DataSourceUpdateMode.OnPropertyChanged)
+                {
+                    push_text_change();
+                }
+            }
+        }
+
+        private void setup()
         {
             InitializeComponent();
             starting_forecolour = ForeColor;
+            this.PropertyChanged += handle_property_changed;
             this.Enter += textBox1_Enter;
             this.Validated += textBox1_Leave;
 
@@ -70,47 +126,52 @@ namespace Choreograph
             Anchor = (AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top);
             ForeColor = HintForecolor;
 
-            if (show_hint())
-            {
-                enable_hint();
-            }
+            show_hint();
         }
 
-        private bool show_hint()
+        public HintTextBox()
         {
-            return (!Focused && Text.Trim() == "" && Hint.Trim() != "");
+            setup();
+        }
+
+        public HintTextBox(Unfocus unfocus)
+        {
+            Unfocus = unfocus;
+            setup();
         }
 
         private void enable_hint()
         {
-            hint_flag = true;
             hint_active = true;
             ForeColor = HintForecolor;
-            Text = Hint;
+            base.Text = Hint;
         }
 
         private void disable_hint()
         {
-            hint_active = false;
-            hint_flag = false;
             ForeColor = starting_forecolour;
+            base.Text = Text;
+            hint_active = false;
+        }
+
+        private bool show_hint()
+        {
+            if (!Focused && Text.Trim() == "" && Hint.Trim() != "")
+            {
+                enable_hint();
+                return true;
+            }
+            return false;
         }
 
         private void textBox1_Leave(object sender, EventArgs e)
         {
-            if (show_hint())
-            {
-                enable_hint();
-            }
+            show_hint();
         }
 
         private void textBox1_Enter(object sender, EventArgs e)
         {
-            if (hint_active)
-            {
-                disable_hint();
-                Text = "";
-            }
+            disable_hint();
         }
 
         private void HintTextBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -118,14 +179,13 @@ namespace Choreograph
             if (e.KeyChar == (char)Keys.Return)
             {
                 e.Handled = true;
-                foreach (Binding binding in DataBindings)
+                if (Unfocus != null)
                 {
-                    if (binding.PropertyName == "Text")
-                    {
-                        binding.WriteValue();
-                        // This is bad but WriteValue alone doesn't notify changes
-                        Storage.characters.AcceptChanges();
-                    }
+                    Unfocus();
+                }
+                if (SourceUpdateMode == DataSourceUpdateMode.OnValidation)
+                {
+                    push_text_change();
                 }
             }
         }

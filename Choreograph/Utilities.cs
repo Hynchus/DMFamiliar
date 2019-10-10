@@ -8,6 +8,16 @@ using System.Drawing.Imaging;
 
 namespace Choreograph
 {
+    enum Direction
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
+
+    public delegate void Unfocus();
+
     public static class Utilities
     {
 

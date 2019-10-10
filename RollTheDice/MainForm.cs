@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RollTheDice {
-    public partial class Main : Form {
+    public partial class MainForm : Form {
         public Color DEFAULT_RULE_COLOUR = Color.LightGray;
         bool hold_profiles_dropdown = false;
         ResultsDisplayForm results_display = null;
 
-        public Main() {
+        public MainForm() {
             InitializeComponent();
         }
 

@@ -24,8 +24,7 @@ namespace Choreograph
         }
 
         DataView character_view;
-
-
+        Unfocus unfocus;
 
         private void not_bool(object sender, ConvertEventArgs e)
         {
@@ -78,7 +77,7 @@ namespace Choreograph
             character_view.RowFilter = string.Format("{0} = '{1}'", "id", id);
 
             nametb.DataBindings.Clear();
-            nametb.DataBindings.Add(new Binding("Text", character_view, "name", false, DataSourceUpdateMode.OnPropertyChanged));
+            nametb.DataBindings.Add(new Binding("Text", character_view, "name", true, DataSourceUpdateMode.OnPropertyChanged));
             modtb.DataBindings.Clear();
             modtb.DataBindings.Add(new Binding("Text", character_view, "mod"));
             rolltb.DataBindings.Clear();
@@ -131,24 +130,31 @@ namespace Choreograph
         private void setup()
         {
             InitializeComponent();
+            nametb.Unfocus = unfocus;
+            modtb.Unfocus = unfocus;
+            rolltb.Unfocus = unfocus;
             character_view = Storage.characters.AsDataView();
             Storage.characters.ColumnChanged += character_property_changed;
         }
 
-        public CharacterEditControl()
+        public CharacterEditControl(Unfocus unfocus)
         {
+            this.unfocus = unfocus;
             setup();
         }
 
-        public CharacterEditControl(string id)
+        public CharacterEditControl(Unfocus unfocus, string id)
         {
+            this.unfocus = unfocus;
             setup();
             this.id = id;
         }
 
         private void toggle_lock()
         {
+            unfocus();
             DataRow tmp = Storage.characters.Rows.Find(id);
+            if (tmp == null) { return; }
             tmp["locked"] = !(bool)tmp["locked"];
             Storage.characters.AcceptChanges();
         }
@@ -160,12 +166,8 @@ namespace Choreograph
 
         private void removebtn_Click(object sender, EventArgs e)
         {
+            unfocus();
             Storage.active_ids.Remove(this.id);
-        }
-
-        private void nametb_TextChanged(object sender, EventArgs e)
-        {
-            Storage.characters.AcceptChanges();
         }
     }
 }

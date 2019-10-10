@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace RollTheDice {
     public partial class RuleButton : UserControl {
-        private Main owner;
+        private MainForm owner;
 
         public void set_button_colour(Color colour)
         {
@@ -26,7 +26,7 @@ namespace RollTheDice {
             }
         }
 
-        public RuleButton(Main owner, string rule_name, Color rule_colour) {
+        public RuleButton(MainForm owner, string rule_name, Color rule_colour) {
             InitializeComponent();
             this.owner = owner;
             Button.Text = rule_name;

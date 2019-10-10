@@ -17,8 +17,8 @@ namespace DMFamiliar
         private ContextMenuStrip menu = null;
         private NotifyIcon tray = null;
 
-        Form choreograph_form = null;
-        Form rtd_form = null;
+        Choreograph.MainForm choreograph_form = null;
+        RollTheDice.MainForm rtd_form = null;
 
 
         private void show_menu(object sender, MouseEventArgs e)
@@ -86,7 +86,7 @@ namespace DMFamiliar
         {
             if (rtd_form == null)
             {
-                rtd_form = new RollTheDice.Main();
+                rtd_form = new RollTheDice.MainForm();
             }
             try
             {
@@ -104,7 +104,7 @@ namespace DMFamiliar
         {
             try
             {
-                choreograph_form.Close();
+                choreograph_form.Terminate();
             }
             catch { }
             try

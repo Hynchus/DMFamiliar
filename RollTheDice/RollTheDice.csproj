@@ -115,11 +115,11 @@
     <Compile Include="DieControl.Designer.cs">
       <DependentUpon>DieControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Modifier.cs">
       <SubType>UserControl</SubType>
@@ -167,8 +167,8 @@
     <EmbeddedResource Include="ImportRules.resx">
       <DependentUpon>ImportRules.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modifier.resx">
       <DependentUpon>Modifier.cs</DependentUpon>
