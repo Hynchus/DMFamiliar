@@ -12,6 +12,7 @@ namespace Choreograph
 {
     public partial class InactiveCharacterControl : UserControl
     {
+        Unfocus unfocus;
         private string _id;
         public string id {
             get { return _id; }
@@ -65,19 +66,22 @@ namespace Choreograph
             character_view = Storage.characters.AsDataView();
         }
 
-        public InactiveCharacterControl()
+        public InactiveCharacterControl(Unfocus unfocus)
         {
+            this.unfocus = unfocus;
             setup();
         }
 
-        public InactiveCharacterControl(string id)
+        public InactiveCharacterControl(Unfocus unfocus, string id)
         {
+            this.unfocus = unfocus;
             setup();
             this.id = id;
         }
 
         private void movebtn_Click(object sender, EventArgs e)
         {
+            unfocus();
             Storage.active_ids.Add(id);
         }
     }

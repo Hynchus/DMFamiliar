@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Deployment.Application;
 
 
 namespace DMFamiliar
@@ -31,21 +32,52 @@ namespace DMFamiliar
             }
         }
 
+        private void update_version()
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                if (ApplicationDeployment.CurrentDeployment.CurrentVersion != ApplicationDeployment.CurrentDeployment.UpdatedVersion)
+                {
+                    Application.Restart();
+                }
+            }
+        }
+
+        private void check_update(object sender, EventArgs e)
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                if (ApplicationDeployment.CurrentDeployment.CurrentVersion != ApplicationDeployment.CurrentDeployment.UpdatedVersion)
+                {
+                    update_version();
+                }
+            }
+        }
+
         private void setup()
         {
             Application.ApplicationExit += new EventHandler(handle_closing);
 
-            choreograph = new ToolStripMenuItem("Choreograph", null, open_choreograph);
-            rtd = new ToolStripMenuItem("Roll The Dice", null, open_rtd);
-            exit = new ToolStripMenuItem("Close All", null, close_all);
             menu = new ContextMenuStrip();
             tray = new NotifyIcon();
 
             menu.Items.Clear();
-            menu.Items.Add(choreograph);
-            menu.Items.Add(rtd);
+            menu.Items.Add(new ToolStripMenuItem("Choreograph", null, open_choreograph));
+            menu.Items.Add(new ToolStripMenuItem("Roll The Dice", null, open_rtd));
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(exit);
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    menu.Items.Add(new ToolStripMenuItem("Update Available", null, check_update));
+                }
+                else
+                {
+                    // Not actually showing the balloontip, but putting this here anyways
+                    tray.BalloonTipText = string.Join("", "v.", ApplicationDeployment.CurrentDeployment.CurrentVersion);
+                }
+            }
+            menu.Items.Add(new ToolStripMenuItem("Quit", null, close_all));
             tray.ContextMenuStrip = menu;
             tray.MouseClick += show_menu;
             tray.Icon = DMFamiliar.Properties.Resources.tray;
@@ -60,8 +92,12 @@ namespace DMFamiliar
 
         private void handle_closing(object sender, EventArgs e)
         {
-            tray.Visible = false;
-            tray = null;
+            try
+            {
+                tray.Visible = false;
+                tray = null;
+            }
+            catch { }
         }
 
         private void open_choreograph(object sender, EventArgs e)
@@ -102,17 +138,14 @@ namespace DMFamiliar
 
         private void close_all(object sender, EventArgs e)
         {
-            try
+            if (Application.MessageLoop)
             {
-                choreograph_form.Terminate();
+                Application.Exit();
             }
-            catch { }
-            try
+            else
             {
-                rtd_form.Close();
+                Environment.Exit(1);
             }
-            catch { }
-            Application.Exit();
         }
     }
 }
