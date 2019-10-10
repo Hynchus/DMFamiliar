@@ -15,6 +15,7 @@ using System.Runtime.CompilerServices;
 
 namespace Choreograph
 {
+
     [Serializable]
     class DisplaySettings : INotifyPropertyChanged
     {
@@ -25,6 +26,7 @@ namespace Choreograph
         Color _characters_font_colour = Color.Black;
         Color _background_colour = Color.White;
         float _border_opacity = 0.5f;
+        Direction _growth_direction = Direction.DOWN;
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -101,6 +103,15 @@ namespace Choreograph
                 notify_property_changed();
             }
         }
+
+        [field: NonSerialized]
+        public Direction GrowthDirection {
+            get { return _growth_direction; }
+            set {
+                _growth_direction = value;
+                notify_property_changed();
+            }
+        }
     }
 
     [Serializable]
@@ -145,20 +156,27 @@ namespace Choreograph
 
         private static bool write_file(string filename, object contents)
         {
+            string tmp_filename = string.Join("", filename, "_tmp");
+            Directory.CreateDirectory(Directory.GetParent(filename).FullName);
+            if (File.Exists(filename))
+            {
+                File.Move(filename, tmp_filename);
+            }
             try
             {
-                Directory.CreateDirectory(Directory.GetParent(filename).FullName);
                 using (var stream = new StreamWriter(filename))
                 {
                     var formatter = new BinaryFormatter();
                     formatter.Serialize(stream.BaseStream, contents);
                 }
-                return true;
             }
             catch (Exception ex) {
                 File.Delete(filename);
+                File.Move(tmp_filename, filename);
+                throw ex;
             }
-            return false;
+            File.Delete(tmp_filename);
+            return true;
         }
 
         private static DataTable create_characters_table()
@@ -204,18 +222,26 @@ namespace Choreograph
 
         private static bool write_datatable(string filename, DataTable table)
         {
+            string tmp_filename = string.Join("", filename, "_tmp");
+            Directory.CreateDirectory(Directory.GetParent(filename).FullName);
+            if (File.Exists(filename))
+            {
+                File.Move(filename, tmp_filename);
+            }
             try
             {
                 DataSet tmp = new DataSet();
                 tmp.Tables.Add(table.Copy());
                 tmp.WriteXml(filename);
-                return true;
             }
             catch (Exception ex)
             {
-
+                File.Delete(filename);
+                File.Move(tmp_filename, filename);
+                throw ex;
             }
-            return false;
+            File.Delete(tmp_filename);
+            return true;
         }
 
         public static void load_storage()
@@ -236,9 +262,11 @@ namespace Choreograph
         public static void purge_characters()
         {
             characters.AcceptChanges();
-            DataView tmp = new DataView(characters);
-            tmp.RowFilter = string.Format("Trim({0}) <> '{1}'", "name", "");
-            characters = tmp.ToTable();
+            DataView filter_view = new DataView(characters);
+            filter_view.RowFilter = string.Format("Trim({0}) <> '{1}'", "name", "");
+            DataTable purged_table = filter_view.ToTable();
+            characters.Clear();
+            characters.Load(purged_table.CreateDataReader());
 
             BindingList<string> remaining_actives = new BindingList<string>();
             foreach(DataRow character in characters.Rows)
@@ -254,16 +282,15 @@ namespace Choreograph
         public static bool save_storage()
         {
             purge_characters();
-            if (!write_datatable(CHARACTERS_SAVE_FILE, characters))
+            try
             {
-                return false;
+                write_datatable(CHARACTERS_SAVE_FILE, characters);
+                write_file(ACTIVES_SAVE_FILE, active_ids);
+                write_file(SETTINGS_SAVE_FILE, settings);
             }
-            if (!write_file(ACTIVES_SAVE_FILE, active_ids))
+            catch (Exception ex)
             {
-                return false;
-            }
-            if (!write_file(SETTINGS_SAVE_FILE, settings))
-            {
+                // Need to log here
                 return false;
             }
             return true;

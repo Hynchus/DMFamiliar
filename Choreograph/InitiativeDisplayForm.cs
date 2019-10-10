@@ -27,6 +27,7 @@ namespace Choreograph
         Size resize_start = new Size(0, 0);
         Point mouse_start = new Point(0, 0);
         Size previous_minimum_size = new Size(0, 0);
+        Size previous_size = new Size(0, 0);
         string focused_character = null;
         Color focused_character_previous_backcolour;
         Color focused_character_previous_forecolour;
@@ -135,7 +136,7 @@ namespace Choreograph
             {
                 tmp.Add(create_character_label((string)character["name"]));
             }
-            tmp.Reverse();
+            //tmp.Reverse();
             focused_character = null;
             characterlistpanel.Controls.Clear();
             characterlistpanel.Controls.AddRange(tmp.ToArray());
@@ -254,26 +255,29 @@ namespace Choreograph
         {
             switch (e.PropertyName)
             {
-                case "DisplayTitleText":
+                case nameof(Storage.settings.TitleText):
                     titlelbl.Text = Storage.settings.TitleText;
                     titletextbox.Text = Storage.settings.TitleText;
                     refresh_title_text();
                     break;
-                case "DisplayTitleFont":
+                case nameof(Storage.settings.TitleFont):
                     refresh_title_text();
                     break;
-                case "DisplayTitleFontColour":
+                case nameof(Storage.settings.TitleFontColour):
                     titlelbl.ForeColor = Storage.settings.TitleFontColour;
                     break;
-                case "DisplayCharactersFont":
-                case "DisplayCharactersFontColour":
+                case nameof(Storage.settings.CharactersFont):
+                case nameof(Storage.settings.CharactersFontColour):
                     change_characters_font(Storage.settings.CharactersFont, Storage.settings.CharactersFontColour);
                     break;
-                case "DisplayBackgroundColour":
+                case nameof(Storage.settings.BackgroundColour):
                     BackColor = Storage.settings.BackgroundColour;
                     break;
-                case "DisplayBorderOpacity":
+                case nameof(Storage.settings.BorderOpacity):
                     update_border_opacity();
+                    break;
+                case nameof(Storage.settings.GrowthDirection):
+                    update_growth_direction();
                     break;
             }
         }
@@ -284,7 +288,7 @@ namespace Choreograph
             ACTUAL_MINIMUM_SIZE = MinimumSize;
             characters_view = Storage.characters.AsDataView();
             update_filter();
-            characters_view.Sort = "roll, mod";
+            characters_view.Sort = "roll DESC, mod DESC, name ASC";
             characters_view.ListChanged += update_list;
             Storage.active_ids.ListChanged += update_filter;
             keyboard_hook = new LowLevelKeyboardHook();
@@ -292,6 +296,7 @@ namespace Choreograph
             keyboard_hook.OnKeyUnpressed += global_key_unpressed;
             keyboard_hook.HookKeyboard();
             load_cosmetics();
+            update_growth_direction();
             Storage.settings.PropertyChanged += handle_settings_changed;
         }
 
@@ -339,6 +344,7 @@ namespace Choreograph
 
         private void InitiativeDisplayForm_Load(object sender, EventArgs e)
         {
+            previous_size = Size;
             if (!Properties.Settings.Default.LoadDisplayFormSettings) { return; }
             Location = Properties.Settings.Default.DisplayFormLocation;
             Size = new Size(Properties.Settings.Default.DisplayFormSize.Width, Size.Height);
@@ -358,7 +364,7 @@ namespace Choreograph
             Properties.Settings.Default.LoadDisplayFormSettings = true;
             Properties.Settings.Default.Save();
         }
-
+        
         private Label create_character_label(string character_name)
         {
             Label character_label = new Label();
@@ -498,6 +504,61 @@ namespace Choreograph
                     Storage.settings.BorderOpacity = old_value;
                 }
             }
+        }
+
+        private void uncheck_growth_direction_toolstripmenuitems()
+        {
+            foreach (ToolStripMenuItem item in growthDirectionToolStripMenuItem.DropDownItems)
+            {
+                item.BackColor = growthDirectionToolStripMenuItem.BackColor;
+                item.ForeColor = growthDirectionToolStripMenuItem.ForeColor;
+            }
+        }
+
+        private void highlight_toolstripmenuitem(ToolStripMenuItem item)
+        {
+            ToolStrip parent = item.GetCurrentParent();
+            if (parent == null) { return; }
+            item.BackColor = parent.ForeColor;
+            item.ForeColor = parent.BackColor;
+        }
+
+        private void update_growth_direction()
+        {
+            populate_list();
+            uncheck_growth_direction_toolstripmenuitems();
+            switch (Storage.settings.GrowthDirection)
+            {
+                case Direction.DOWN:
+                    highlight_toolstripmenuitem(growdowntoolstripmenuitem);
+                    break;
+                case Direction.UP:
+                    highlight_toolstripmenuitem(growuptoolstripmenuitem);
+                    break;
+            }
+        }
+
+        private void downToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Storage.settings.GrowthDirection = Direction.DOWN;
+        }
+
+        private void upToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Storage.settings.GrowthDirection = Direction.UP;
+        }
+
+        private void InitiativeDisplayForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (Size.Height != previous_size.Height)
+            {
+                if (!resizing && Storage.settings.GrowthDirection == Direction.UP)
+                {
+                    int difference = Size.Height - previous_size.Height;
+                    Location = new Point(Location.X, Location.Y - difference);
+                }
+            }
+            previous_size = Size;
         }
     }
 }

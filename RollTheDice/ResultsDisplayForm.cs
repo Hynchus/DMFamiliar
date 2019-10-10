@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RollTheDice {
     public partial class ResultsDisplayForm : Form {
-        private Main owner;
+        private MainForm owner;
 
-        public ResultsDisplayForm(Main owner) {
+        public ResultsDisplayForm(MainForm owner) {
             InitializeComponent();
             this.owner = owner;
         }

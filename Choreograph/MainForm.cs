@@ -8,29 +8,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Deployment.Application;
+using System.Reflection;
+
 
 namespace Choreograph
 {
     public partial class MainForm : Form
     {
+        bool close_to_tray = true;
         Form display_form = null;
-        ToolStripMenuItem new_character_menu_item = null;
-        ToolStripMenuItem clear_active_characters_menu_item = null;
-        ContextMenuStrip active_characters_menu = null;
-
         DataView characterlist_source = null;
-
         Random seed = new Random();
 
 
         private void setup_menus()
         {
-            new_character_menu_item = new ToolStripMenuItem("New Character", null, new_character_click);
-            clear_active_characters_menu_item = new ToolStripMenuItem("Clear Active Characters", null, clear_active_characters_click);
-            active_characters_menu = new ContextMenuStrip();
-            active_characters_menu.Items.Add(new_character_menu_item);
-            active_characters_menu.Items.Add(new ToolStripSeparator());
-            active_characters_menu.Items.Add(clear_active_characters_menu_item);
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    versiontoolstripmenuitem.Text = "Restart for Update";
+                }
+                else
+                {
+                    versiontoolstripmenuitem.Text = string.Join("", "v. ", ApplicationDeployment.CurrentDeployment.CurrentVersion);
+                }
+            }
         }
 
         private void enforce_inactivecharacters_filter()
@@ -55,6 +59,7 @@ namespace Choreograph
         {
             Storage.characters.RowChanged -= handle_characters_change;
             Storage.active_ids.ListChanged -= handle_actives_change;
+            Storage.characters.ColumnChanged -= character_property_changed;
         }
 
         public MainForm()
@@ -73,6 +78,7 @@ namespace Choreograph
             displaybtn.Text = "Hide Display";
             displaybtn.BackColor = Color.Violet;
             display_form.Show();
+            Focus();
         }
 
         private void hide_display()
@@ -119,6 +125,7 @@ namespace Choreograph
         private void clear_active_characters_click(object sender, EventArgs e)
         {
             Storage.active_ids.Clear();
+            relinquish_focus();
         }
 
         private void displaybtn_Click(object sender, EventArgs e)
@@ -166,10 +173,16 @@ namespace Choreograph
             }
         }
 
+        private CharacterEditControl create_active_control(string active_id)
+        {
+            CharacterEditControl new_control = new CharacterEditControl(relinquish_focus, active_id);
+            new_control.Dock = DockStyle.Top;
+            return new_control;
+        }
+
         private void add_active_control(string active_id, bool sort = true)
         {
-            CharacterEditControl new_control = new CharacterEditControl(active_id);
-            new_control.Dock = DockStyle.Top;
+            CharacterEditControl new_control = create_active_control(active_id);
             activecharacterspanel.Controls.Add(new_control);
             if (sort)
             {
@@ -177,12 +190,17 @@ namespace Choreograph
             }
         }
 
-        private void add_inactive_control(string id, bool sort = true)
+        private InactiveCharacterControl create_inactive_control(string id)
         {
             InactiveCharacterControl new_control = new InactiveCharacterControl(id);
             new_control.Dock = DockStyle.Top;
-            inactivecharacterspanel.Controls.Add(new_control);
+            return new_control;
+        }
 
+        private void add_inactive_control(string id, bool sort = true)
+        {
+            InactiveCharacterControl new_control = create_inactive_control(id);
+            inactivecharacterspanel.Controls.Add(new_control);
             if (sort)
             {
                 sort_inactivecharacterspanel();
@@ -243,6 +261,11 @@ namespace Choreograph
                     purge_active_controls();
                     enforce_inactivecharacters_filter();
                     break;
+                case ListChangedType.Reset:
+                    Storage.purge_characters();
+                    load_active_controls();
+                    load_inactive_controls();
+                    break;
                 default:
                     break;
             }
@@ -257,19 +280,25 @@ namespace Choreograph
 
         private void load_active_controls()
         {
+            List<CharacterEditControl> new_controls = new List<CharacterEditControl>();
             foreach(string active_id in Storage.active_ids)
             {
-                add_active_control(active_id, false);
+                new_controls.Add(create_active_control(active_id));
             }
+            activecharacterspanel.Controls.Clear();
+            activecharacterspanel.Controls.AddRange(new_controls.ToArray());
             sort_activecharacterspanel();
         }
 
         private void load_inactive_controls()
         {
+            List<InactiveCharacterControl> new_controls = new List<InactiveCharacterControl>();
             foreach (DataRow character in Storage.characters.Rows)
             {
-                add_inactive_control((string)character["id"], false);
+                new_controls.Add(create_inactive_control((string)character["id"]));
             }
+            inactivecharacterspanel.Controls.Clear();
+            inactivecharacterspanel.Controls.AddRange(new_controls.ToArray());
             sort_inactivecharacterspanel();
         }
 
@@ -281,6 +310,7 @@ namespace Choreograph
             load_layout();
             load_inactive_controls();
             load_active_controls();
+            filtertb.Unfocus = relinquish_focus;
             ResumeLayout();
         }
 
@@ -297,8 +327,16 @@ namespace Choreograph
             Properties.Settings.Default.Save();
         }
 
+        public void Terminate()
+        {
+            close_to_tray = false;
+            this.Close();
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            relinquish_focus();
+            save_layout();
             if (!Storage.save_storage())
             {
                 if (MessageBox.Show("Failed while writing data to storage.\nThis may be due to folder permissions.\n\nContinue closing the application?", "Write Error", MessageBoxButtons.YesNo) == DialogResult.No)
@@ -308,17 +346,23 @@ namespace Choreograph
                 }
             }
 
-            save_layout();
-            stop_subscriptions();
-            
-            hide_display();
+            if (close_to_tray)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+            else
+            {
+                stop_subscriptions();
+                hide_display();
+            }
         }
 
         private void label1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                active_characters_menu.Show(MousePosition);
+                activecharactersmenustrip.Show(MousePosition);
             }
         }
 
@@ -342,6 +386,7 @@ namespace Choreograph
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            relinquish_focus();
             if (Properties.Settings.Default.MainSplitterDistance >= 0)
             {
                 splitContainer1.SplitterDistance = Properties.Settings.Default.MainSplitterDistance;
@@ -350,6 +395,54 @@ namespace Choreograph
             {
                 show_display();
             }
+        }
+
+        private void relinquish_focus()
+        {
+            if (Storage.active_ids.Count <= 0)
+            {
+                newbtn.Focus();
+            }
+            else
+            {
+                rollbtn.Focus();
+            }
+        }
+
+        private void MainForm_MouseClick(object sender, MouseEventArgs e)
+        {
+            relinquish_focus();
+            if (e.Button == MouseButtons.Right)
+            {
+                menustrip.Show(MousePosition);
+            }
+        }
+
+        // Bubbling. There doesn't seem to be an option otherwise...
+        private void pass_mouseclick_to_form(object sender, MouseEventArgs e)
+        {
+            MainForm_MouseClick(sender, e);
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Terminate();
+        }
+
+        private void show_mainform()
+        {
+            Show();
+            BringToFront();
+        }
+
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            show_mainform();
+        }
+
+        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            show_mainform();
         }
     }
 }

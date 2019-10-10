@@ -84,11 +84,11 @@
             this.rolltb.Margin = new System.Windows.Forms.Padding(8, 4, 4, 4);
             this.rolltb.Name = "rolltb";
             this.rolltb.Size = new System.Drawing.Size(50, 32);
+            this.rolltb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnValidation;
             this.rolltb.TabIndex = 7;
             this.rolltb.Text = "Roll";
             this.rolltb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.rolltb, "Initiative Roll");
-            this.rolltb.Validated += new System.EventHandler(this.nametb_TextChanged);
             // 
             // modtb
             // 
@@ -102,11 +102,11 @@
             this.modtb.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.modtb.Name = "modtb";
             this.modtb.Size = new System.Drawing.Size(50, 32);
+            this.modtb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnValidation;
             this.modtb.TabIndex = 6;
             this.modtb.Text = "Mod";
             this.modtb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.modtb, "Initiative Modifier");
-            this.modtb.Validated += new System.EventHandler(this.nametb_TextChanged);
             // 
             // nametb
             // 
@@ -121,11 +121,11 @@
             this.nametb.Margin = new System.Windows.Forms.Padding(4, 4, 8, 4);
             this.nametb.Name = "nametb";
             this.nametb.Size = new System.Drawing.Size(96, 32);
+            this.nametb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged;
             this.nametb.TabIndex = 5;
             this.nametb.Text = "Name";
             this.nametb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.nametb, "Character Name");
-            this.nametb.Validated += new System.EventHandler(this.nametb_TextChanged);
             // 
             // CharacterEditControl
             // 

@@ -48,6 +48,9 @@
             this.backgroundcolourbtn = new System.Windows.Forms.ToolStripMenuItem();
             this.borderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.opacityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.growthDirectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.growdowntoolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.growuptoolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
             this.lockDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,11 +142,12 @@
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cosmeticsToolStripMenuItem,
+            this.growthDirectionToolStripMenuItem,
             this.lockDisplayToolStripMenuItem,
             this.toolStripSeparator1,
             this.hideDisplayToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 100);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(219, 130);
             // 
             // cosmeticsToolStripMenuItem
             // 
@@ -153,7 +157,7 @@
             this.backgroundToolStripMenuItem,
             this.borderToolStripMenuItem});
             this.cosmeticsToolStripMenuItem.Name = "cosmeticsToolStripMenuItem";
-            this.cosmeticsToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.cosmeticsToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.cosmeticsToolStripMenuItem.Text = "Cosmetics";
             // 
             // titleToolStripMenuItem
@@ -243,22 +247,45 @@
             this.opacityToolStripMenuItem.Text = "Opacity";
             this.opacityToolStripMenuItem.Click += new System.EventHandler(this.opacityToolStripMenuItem_Click);
             // 
+            // growthDirectionToolStripMenuItem
+            // 
+            this.growthDirectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.growdowntoolstripmenuitem,
+            this.growuptoolstripmenuitem});
+            this.growthDirectionToolStripMenuItem.Name = "growthDirectionToolStripMenuItem";
+            this.growthDirectionToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
+            this.growthDirectionToolStripMenuItem.Text = "Growth Direction";
+            // 
+            // growdowntoolstripmenuitem
+            // 
+            this.growdowntoolstripmenuitem.Name = "growdowntoolstripmenuitem";
+            this.growdowntoolstripmenuitem.Size = new System.Drawing.Size(143, 30);
+            this.growdowntoolstripmenuitem.Text = "Down";
+            this.growdowntoolstripmenuitem.Click += new System.EventHandler(this.downToolStripMenuItem_Click);
+            // 
+            // growuptoolstripmenuitem
+            // 
+            this.growuptoolstripmenuitem.Name = "growuptoolstripmenuitem";
+            this.growuptoolstripmenuitem.Size = new System.Drawing.Size(143, 30);
+            this.growuptoolstripmenuitem.Text = "Up";
+            this.growuptoolstripmenuitem.Click += new System.EventHandler(this.upToolStripMenuItem_Click);
+            // 
             // lockDisplayToolStripMenuItem
             // 
             this.lockDisplayToolStripMenuItem.Name = "lockDisplayToolStripMenuItem";
-            this.lockDisplayToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.lockDisplayToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.lockDisplayToolStripMenuItem.Text = "Lock Display";
             this.lockDisplayToolStripMenuItem.Click += new System.EventHandler(this.lockDisplayToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(215, 6);
             // 
             // hideDisplayToolStripMenuItem
             // 
             this.hideDisplayToolStripMenuItem.Name = "hideDisplayToolStripMenuItem";
-            this.hideDisplayToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
+            this.hideDisplayToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
             this.hideDisplayToolStripMenuItem.Text = "Hide Display";
             this.hideDisplayToolStripMenuItem.Click += new System.EventHandler(this.hideDisplayToolStripMenuItem_Click);
             // 
@@ -320,12 +347,14 @@
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 85);
             this.Name = "InitiativeDisplayForm";
+            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "InitiativeDisplayForm";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InitiativeDisplayForm_FormClosing);
             this.Load += new System.EventHandler(this.InitiativeDisplayForm_Load);
+            this.SizeChanged += new System.EventHandler(this.InitiativeDisplayForm_SizeChanged);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.InitiativeDisplayForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.InitiativeDisplayForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.InitiativeDisplayForm_MouseUp);
@@ -365,5 +394,8 @@
         private System.Windows.Forms.Panel mainpanel;
         private System.Windows.Forms.ToolStripMenuItem borderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem opacityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem growthDirectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem growdowntoolstripmenuitem;
+        private System.Windows.Forms.ToolStripMenuItem growuptoolstripmenuitem;
     }
 }
