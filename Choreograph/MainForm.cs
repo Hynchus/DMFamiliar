@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Deployment.Application;
 using System.Reflection;
 
 
@@ -21,21 +20,6 @@ namespace Choreograph
         DataView characterlist_source = null;
         Random seed = new Random();
 
-
-        private void setup_menus()
-        {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
-                {
-                    versiontoolstripmenuitem.Text = "Restart for Update";
-                }
-                else
-                {
-                    versiontoolstripmenuitem.Text = string.Join("", "v. ", ApplicationDeployment.CurrentDeployment.CurrentVersion);
-                }
-            }
-        }
 
         private void enforce_inactivecharacters_filter()
         {
@@ -65,7 +49,6 @@ namespace Choreograph
         public MainForm()
         {
             InitializeComponent();
-            setup_menus();
         }
 
         private void show_display()
@@ -124,8 +107,8 @@ namespace Choreograph
 
         private void clear_active_characters_click(object sender, EventArgs e)
         {
-            Storage.active_ids.Clear();
             relinquish_focus();
+            Storage.active_ids.Clear();
         }
 
         private void displaybtn_Click(object sender, EventArgs e)
@@ -192,7 +175,7 @@ namespace Choreograph
 
         private InactiveCharacterControl create_inactive_control(string id)
         {
-            InactiveCharacterControl new_control = new InactiveCharacterControl(id);
+            InactiveCharacterControl new_control = new InactiveCharacterControl(relinquish_focus, id);
             new_control.Dock = DockStyle.Top;
             return new_control;
         }
@@ -311,6 +294,7 @@ namespace Choreograph
             load_inactive_controls();
             load_active_controls();
             filtertb.Unfocus = relinquish_focus;
+            filtertb.Text = "";
             ResumeLayout();
         }
 
@@ -346,16 +330,17 @@ namespace Choreograph
                 }
             }
 
-            if (close_to_tray)
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                e.Cancel = true;
-                Hide();
-            }
-            else
-            {
-                stop_subscriptions();
+                if (close_to_tray)
+                {
+                    e.Cancel = true;
+                    Hide();
+                    return;
+                }
                 hide_display();
             }
+            stop_subscriptions();
         }
 
         private void label1_MouseClick(object sender, MouseEventArgs e)
@@ -414,7 +399,8 @@ namespace Choreograph
             relinquish_focus();
             if (e.Button == MouseButtons.Right)
             {
-                menustrip.Show(MousePosition);
+                // Nothing to show on menu at the moment
+                //menustrip.Show(MousePosition);
             }
         }
 
@@ -443,18 +429,6 @@ namespace Choreograph
         private void notifyIcon_DoubleClick(object sender, EventArgs e)
         {
             show_mainform();
-        }
-
-        private void versiontoolstripmenuitem_Click(object sender, EventArgs e)
-        {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                if (ApplicationDeployment.CurrentDeployment.CurrentVersion != ApplicationDeployment.CurrentDeployment.UpdatedVersion)
-                {
-                    close_to_tray = false;
-                    Application.Restart();
-                }
-            }
         }
     }
 }

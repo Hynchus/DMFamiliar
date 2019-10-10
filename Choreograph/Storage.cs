@@ -267,16 +267,22 @@ namespace Choreograph
             DataTable purged_table = filter_view.ToTable();
             characters.Clear();
             characters.Load(purged_table.CreateDataReader());
-
-            BindingList<string> remaining_actives = new BindingList<string>();
-            foreach(DataRow character in characters.Rows)
+            for (int i = active_ids.Count - 1; i >= 0; i--)
             {
-                if (active_ids.Contains(character["id"]))
+                bool exists = false;
+                foreach (DataRow character in characters.Rows)
                 {
-                    remaining_actives.Add((string)character["id"]);
+                    if ((string)character["id"] == active_ids[i])
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    active_ids.RemoveAt(i);
                 }
             }
-            active_ids = remaining_actives;
         }
 
         public static bool save_storage()

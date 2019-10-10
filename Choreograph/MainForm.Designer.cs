@@ -37,7 +37,6 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.filtertb = new Choreograph.HintTextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.inactivecharacterspanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -46,7 +45,6 @@
             this.newbtn = new System.Windows.Forms.Button();
             this.rollbtn = new System.Windows.Forms.Button();
             this.menustrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.versiontoolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
             this.activecharactersmenustrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newCharacterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -56,6 +54,7 @@
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filtertb = new Choreograph.HintTextBox();
             this.storageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.storageBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -69,7 +68,6 @@
             this.panel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            this.menustrip.SuspendLayout();
             this.activecharactersmenustrip.SuspendLayout();
             this.trayiconmenustrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.storageBindingSource)).BeginInit();
@@ -192,23 +190,6 @@
             this.tableLayoutPanel2.TabIndex = 0;
             this.tableLayoutPanel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pass_mouseclick_to_form);
             // 
-            // filtertb
-            // 
-            this.filtertb.BackColor = System.Drawing.Color.White;
-            this.filtertb.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.filtertb.Font = new System.Drawing.Font("Trebuchet MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filtertb.ForeColor = System.Drawing.Color.Gray;
-            this.filtertb.Hint = "Filter";
-            this.filtertb.Location = new System.Drawing.Point(2, 9);
-            this.filtertb.Margin = new System.Windows.Forms.Padding(2);
-            this.filtertb.Name = "filtertb";
-            this.filtertb.Size = new System.Drawing.Size(190, 31);
-            this.filtertb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnValidation;
-            this.filtertb.TabIndex = 0;
-            this.filtertb.Text = "Filter";
-            this.filtertb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.filtertb.TextChanged += new System.EventHandler(this.filtertb_TextChanged);
-            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
@@ -316,17 +297,8 @@
             // menustrip
             // 
             this.menustrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.menustrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.versiontoolstripmenuitem});
             this.menustrip.Name = "menustrip";
-            this.menustrip.Size = new System.Drawing.Size(241, 67);
-            // 
-            // versiontoolstripmenuitem
-            // 
-            this.versiontoolstripmenuitem.Name = "versiontoolstripmenuitem";
-            this.versiontoolstripmenuitem.Size = new System.Drawing.Size(240, 30);
-            this.versiontoolstripmenuitem.Text = "version";
-            this.versiontoolstripmenuitem.Click += new System.EventHandler(this.versiontoolstripmenuitem_Click);
+            this.menustrip.Size = new System.Drawing.Size(61, 4);
             // 
             // activecharactersmenustrip
             // 
@@ -336,7 +308,7 @@
             this.toolStripSeparator1,
             this.clearAllActiveCharactersToolStripMenuItem});
             this.activecharactersmenustrip.Name = "activecharactersmenustrip";
-            this.activecharactersmenustrip.Size = new System.Drawing.Size(289, 70);
+            this.activecharactersmenustrip.Size = new System.Drawing.Size(289, 103);
             // 
             // newCharacterToolStripMenuItem
             // 
@@ -394,6 +366,23 @@
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
+            // filtertb
+            // 
+            this.filtertb.BackColor = System.Drawing.Color.White;
+            this.filtertb.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.filtertb.Font = new System.Drawing.Font("Trebuchet MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filtertb.ForeColor = System.Drawing.Color.Gray;
+            this.filtertb.Hint = "Filter";
+            this.filtertb.Location = new System.Drawing.Point(2, 9);
+            this.filtertb.Margin = new System.Windows.Forms.Padding(2);
+            this.filtertb.Name = "filtertb";
+            this.filtertb.Size = new System.Drawing.Size(190, 31);
+            this.filtertb.SourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.OnValidation;
+            this.filtertb.TabIndex = 0;
+            this.filtertb.Text = "Filter";
+            this.filtertb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.filtertb.TextChanged += new System.EventHandler(this.filtertb_TextChanged);
+            // 
             // storageBindingSource
             // 
             this.storageBindingSource.DataSource = typeof(Choreograph.Storage);
@@ -432,7 +421,6 @@
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
-            this.menustrip.ResumeLayout(false);
             this.activecharactersmenustrip.ResumeLayout(false);
             this.trayiconmenustrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.storageBindingSource)).EndInit();
@@ -461,7 +449,6 @@
         private System.Windows.Forms.Panel activecharacterspanel;
         private System.Windows.Forms.Panel inactivecharacterspanel;
         private System.Windows.Forms.ContextMenuStrip menustrip;
-        private System.Windows.Forms.ToolStripMenuItem versiontoolstripmenuitem;
         private System.Windows.Forms.ContextMenuStrip activecharactersmenustrip;
         private System.Windows.Forms.ToolStripMenuItem newCharacterToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
