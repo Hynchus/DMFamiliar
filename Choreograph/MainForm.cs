@@ -404,7 +404,7 @@ namespace Choreograph
             }
         }
 
-        // Bubbling. There doesn't seem to be an option otherwise...
+        // Bubbling. There doesn't seem to be a cleaner option
         private void pass_mouseclick_to_form(object sender, MouseEventArgs e)
         {
             MainForm_MouseClick(sender, e);

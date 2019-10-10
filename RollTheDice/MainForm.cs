@@ -133,13 +133,13 @@ namespace RollTheDice {
             }
             Properties.Settings.Default.LoadMainFormSettings = true;
             Properties.Settings.Default.Save();
-            try
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                results_display.Close();
-            }
-            catch (Exception)
-            {
-                // ignore exception, either it closes or it doesn't exist
+                try
+                {
+                    results_display.Close();
+                }
+                catch (Exception) { }
             }
         }
 
