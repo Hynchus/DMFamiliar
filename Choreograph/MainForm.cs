@@ -444,5 +444,17 @@ namespace Choreograph
         {
             show_mainform();
         }
+
+        private void versiontoolstripmenuitem_Click(object sender, EventArgs e)
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                if (ApplicationDeployment.CurrentDeployment.CurrentVersion != ApplicationDeployment.CurrentDeployment.UpdatedVersion)
+                {
+                    close_to_tray = false;
+                    Application.Restart();
+                }
+            }
+        }
     }
 }
