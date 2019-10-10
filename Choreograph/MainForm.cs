@@ -417,6 +417,10 @@ namespace Choreograph
 
         private void show_mainform()
         {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                WindowState = FormWindowState.Normal;
+            }
             Show();
             BringToFront();
         }
@@ -426,7 +430,7 @@ namespace Choreograph
             show_mainform();
         }
 
-        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        private void notifyIcon_MouseDoubleClick(object sender, EventArgs e)
         {
             show_mainform();
         }
