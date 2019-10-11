@@ -19,7 +19,7 @@ Features
 
 ## Roll The Dice
 Features
- - Setup rules for repetitive dice rolls, from Bandit melee attacks to a full Wild Magic Surge chart. Very flexible.
+ - Set up rules for repetitive dice rolls, from Bandit melee attacks to a full Wild Magic Surge chart. Very flexible.
  - Click a rule's button and see the result!
  - Create different "Profiles" for different groups of rules; give the Brown Bear 'Bite' and 'Claw', give the Lich its full spell list!
  - Colour included!
